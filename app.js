@@ -26,7 +26,7 @@ box.innerHTML=`
 if(r==="student"){
 box.innerHTML=`
 <input id="sname" placeholder="Name">
-<input id="scode" placeholder="Class code">
+<input id="scode" placeholder="Class code OR paste link">
 <button onclick="joinClass()">Join</button>
 <div id="errorMsg" style="color:red"></div>
 `;
@@ -44,9 +44,12 @@ body:JSON.stringify({teacher_name:name,password})
 });
 
 const data=await res.json();
-alert("Class created: "+data.classId);
-
 classId=data.classId;
+
+const link=window.location.origin + "?class="+classId;
+
+alert("Class created!\nCode: "+classId+"\nJoin link: "+link);
+
 startEducator();
 }
 
@@ -68,12 +71,16 @@ startEducator();
 
 async function joinClass(){
 const name=document.getElementById("sname").value;
-const id=document.getElementById("scode").value;
+let input=document.getElementById("scode").value;
+
+if(input.includes("?class=")){
+input=input.split("?class=")[1];
+}
 
 const res=await fetch(API+"/api/student/join",{
 method:"POST",
 headers:{"Content-Type":"application/json"},
-body:JSON.stringify({name,class_id:id})
+body:JSON.stringify({name,class_id:input})
 });
 
 if(!res.ok){
@@ -81,7 +88,7 @@ document.getElementById("errorMsg").innerText="Wrong class code";
 return;
 }
 
-classId=id;
+classId=input;
 startStudent();
 }
 
@@ -161,6 +168,15 @@ renderChat();
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
+// auto join from link
+const params=new URLSearchParams(window.location.search);
+if(params.get("class")){
+chooseRole("student");
+setTimeout(()=>{
+document.getElementById("scode").value=params.get("class");
+},200);
+}
+
 document.getElementById("startBtn")?.addEventListener("click",()=>{
 document.getElementById("pageWelcome").classList.add("hidden");
 document.getElementById("pageChat").classList.remove("hidden");
