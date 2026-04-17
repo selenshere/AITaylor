@@ -104,7 +104,7 @@ if (sendBtn) sendBtn.onclick = sendMessage;
 
 const submitBtn = document.getElementById("submitBtn");
 if (submitBtn) submitBtn.onclick = submitChat;
-});
+};
 
 // ================= SEND =================
 async function sendMessage() {
