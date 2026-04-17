@@ -205,9 +205,32 @@ alert("Chat error");
 
 // RENDER CHAT
 function renderChat() {
-document.getElementById("chatLog").innerHTML =
-messages.map(m => `<p><b>${m.role}:</b> ${m.content}</p>`).join("");
+const log = document.getElementById("chatLog");
+
+log.innerHTML = messages.map(m => {
+const roleClass = m.role === "user" ? "user" : "taylor";
+
+```
+return `
+  <div class="bubble ${roleClass}">
+    ${m.content}
+  </div>
+`;
+```
+
+}).join("");
+
+log.scrollTop = log.scrollHeight;
+
+// Taylor mesajına tıklayınca analysis aç
+document.querySelectorAll(".bubble.taylor").forEach(el => {
+el.addEventListener("click", () => {
+document.getElementById("selectedText").innerText = el.innerText;
+document.getElementById("analysisOverlay").classList.remove("hidden");
+});
+});
 }
+
 
 // SUBMIT
 async function submitChat() {
