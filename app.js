@@ -39,20 +39,26 @@ async function createClass() {
   const teacher_name = document.getElementById("tname").value;
   const password = document.getElementById("tpass").value;
 
-  const res = await fetch(API + "/api/class/create", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ teacher_name, password }),
-  });
+  if (!teacher_name || !password) return alert("Fill all fields");
 
-  const data = await res.json();
+  try {
+    const res = await fetch(API + "/api/class/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ teacher_name, password }),
+    });
 
-  user = { name: teacher_name, role: "educator" };
-  classId = data.classId;
+    const data = await res.json();
 
-  alert("Class: " + classId);
+    user = { name: teacher_name, role: "educator" };
+    classId = data.classId;
 
-  startApp();
+    alert("Class: " + classId);
+
+    startApp();
+  } catch (e) {
+    alert("Error creating class");
+  }
 }
 
 // LOGIN
@@ -60,18 +66,24 @@ async function loginClass() {
   const class_id = document.getElementById("cid").value;
   const password = document.getElementById("lpass").value;
 
-  const res = await fetch(API + "/api/class/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ classId: class_id, password }),
-  });
+  if (!class_id || !password) return alert("Fill all fields");
 
-  const data = await res.json();
+  try {
+    const res = await fetch(API + "/api/class/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ classId: class_id, password }),
+    });
 
-  user = { name: data.teacher_name, role: "educator" };
-  classId = class_id;
+    const data = await res.json();
 
-  startApp();
+    user = { name: data.teacher_name, role: "educator" };
+    classId = class_id;
+
+    startApp();
+  } catch {
+    alert("Login failed");
+  }
 }
 
 // JOIN
@@ -79,16 +91,22 @@ async function joinClass() {
   const name = document.getElementById("sname").value;
   const class_id = document.getElementById("scode").value;
 
-  await fetch(API + "/api/student/join", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, class_id }),
-  });
+  if (!name || !class_id) return alert("Fill all fields");
 
-  user = { name, role: "student" };
-  classId = class_id;
+  try {
+    await fetch(API + "/api/student/join", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, class_id }),
+    });
 
-  startApp();
+    user = { name, role: "student" };
+    classId = class_id;
+
+    startApp();
+  } catch {
+    alert("Join failed");
+  }
 }
 
 // START
@@ -102,7 +120,10 @@ function startApp() {
   if (user.role === "educator") {
     loadStudents();
     document.getElementById("dashboard").style.display = "block";
-    document.getElementById("chatSection").style.display = "none";
+  }
+
+  if (user.role === "student") {
+    document.getElementById("pageWelcome").style.display = "block";
   }
 }
 
@@ -120,24 +141,30 @@ async function sendMessage() {
   const input = document.getElementById("userInput");
   const text = input.value;
 
+  if (!text) return;
+
   messages.push({ role: "user", content: text });
   input.value = "";
 
   renderChat();
 
-  const res = await fetch(API + "/api/chat", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({ messages })
-  });
+  try {
+    const res = await fetch(API + "/api/chat", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ messages })
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  const reply = data.choices[0].message.content;
+    const reply = data.choices[0].message.content;
 
-  messages.push({ role: "assistant", content: reply });
+    messages.push({ role: "assistant", content: reply });
 
-  renderChat();
+    renderChat();
+  } catch {
+    alert("Chat error");
+  }
 }
 
 // RENDER
@@ -160,3 +187,15 @@ async function submitChat() {
 
   alert("Submitted");
 }
+
+// EVENT BINDINGS
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("sendBtn")?.addEventListener("click", sendMessage);
+
+  document.getElementById("startBtn")?.addEventListener("click", () => {
+    document.getElementById("pageWelcome").style.display = "none";
+    document.getElementById("pageChat").classList.remove("hidden");
+  });
+
+  document.getElementById("submitBtn")?.addEventListener("click", submitChat);
+});
