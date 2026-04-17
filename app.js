@@ -4,6 +4,26 @@ let user = {};
 let classId = null;
 let messages = [];
 
+// 🔥 SESSION RESTORE
+function restoreSession() {
+  const saved = localStorage.getItem("session");
+  if (!saved) return false;
+
+  const data = JSON.parse(saved);
+  user = data.user;
+  classId = data.classId;
+
+  return true;
+}
+
+// 🔥 SAVE SESSION
+function saveSession() {
+  localStorage.setItem("session", JSON.stringify({
+    user,
+    classId
+  }));
+}
+
 // ROLE SELECT
 function chooseRole(role) {
   document.getElementById("entry").style.display = "none";
@@ -52,6 +72,7 @@ async function createClass() {
 
   alert("Class: " + classId);
 
+  saveSession();
   startApp();
 }
 
@@ -71,6 +92,7 @@ async function loginClass() {
   user = { name: data.teacher_name, role: "educator" };
   classId = class_id;
 
+  saveSession();
   startApp();
 }
 
@@ -88,6 +110,7 @@ async function joinClass() {
   user = { name, role: "student" };
   classId = class_id;
 
+  saveSession();
   startApp();
 }
 
@@ -100,19 +123,49 @@ function startApp() {
     `${user.name} | ${user.role} | ${classId}`;
 
   if (user.role === "educator") {
-    loadStudents();
+    loadDashboard();
     document.getElementById("dashboard").style.display = "block";
     document.getElementById("chatSection").style.display = "none";
+  } else {
+    loadProgress();
   }
 }
 
-// LOAD STUDENTS
-async function loadStudents() {
-  const res = await fetch(API + "/api/students/" + classId);
-  const data = await res.json();
+// 🔥 DASHBOARD (FULL)
+async function loadDashboard() {
+  const res1 = await fetch(API + "/api/students/" + classId);
+  const students = await res1.json();
 
-  document.getElementById("studentList").innerHTML =
-    data.map(s => `<p>${s.name}</p>`).join("");
+  const res2 = await fetch(API + "/api/progress/" + classId);
+  const progress = await res2.json();
+
+  document.getElementById("studentList").innerHTML = `
+    <h3>Total: ${students.length}</h3>
+
+    ${students.map(s => {
+      const p = progress.find(x => x.student_name === s.name);
+
+      let status = "not started";
+      if (p) status = p.status;
+
+      return `
+        <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+          <b>${s.name}</b> → ${status}
+          ${p ? `<button onclick="view('${s.name}')">View</button>` : ""}
+        </div>
+      `;
+    }).join("")}
+  `;
+}
+
+// 🔍 VIEW CHAT
+function view(name) {
+  fetch(API + "/api/progress/" + classId)
+    .then(r => r.json())
+    .then(data => {
+      const s = data.find(x => x.student_name === name);
+      alert(JSON.stringify(s.messages, null, 2));
+    });
 }
 
 // CHAT
@@ -132,12 +185,35 @@ async function sendMessage() {
   });
 
   const data = await res.json();
-
   const reply = data.choices[0].message.content;
 
   messages.push({ role: "assistant", content: reply });
 
   renderChat();
+
+  // 🔥 AUTOSAVE
+  await fetch(API + "/api/progress/save", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({
+      student_name: user.name,
+      class_id: classId,
+      messages
+    })
+  });
+}
+
+// LOAD PROGRESS
+async function loadProgress() {
+  const res = await fetch(API + "/api/progress/" + classId);
+  const data = await res.json();
+
+  const mine = data.find(d => d.student_name === user.name);
+
+  if (mine) {
+    messages = mine.messages;
+    renderChat();
+  }
 }
 
 // RENDER
@@ -160,3 +236,10 @@ async function submitChat() {
 
   alert("Submitted");
 }
+
+// INIT
+window.onload = () => {
+  if (restoreSession()) {
+    startApp();
+  }
+};
