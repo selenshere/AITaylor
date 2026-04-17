@@ -4,27 +4,36 @@ const API_URL = "https://aitaylor.onrender.com";
 // 💾 GLOBAL STATE
 let messages = [];
 
-// 👤 USER
+// 👤 USER (role sorar)
 function getUser() {
   let user = localStorage.getItem("user");
 
   if (!user) {
+    const role = prompt("Enter role: educator or student");
+
     user = {
       id: crypto.randomUUID(),
-      role: "student"
+      role: (role || "student").toLowerCase()
     };
+
     localStorage.setItem("user", JSON.stringify(user));
   }
 
   return JSON.parse(user);
 }
 
-// 🏫 CLASS
-function getClassId() {
+// 🏫 CLASS (teacher oluşturur, student girer)
+function getClassId(user) {
   let classId = localStorage.getItem("class_id");
 
   if (!classId) {
-    classId = prompt("Enter class code:") || "demo-class";
+    if (user.role === "educator") {
+      classId = "class-" + Math.floor(Math.random() * 10000);
+      alert("Your class code:\n" + classId);
+    } else {
+      classId = prompt("Enter class code from your teacher:");
+    }
+
     localStorage.setItem("class_id", classId);
   }
 
@@ -40,7 +49,6 @@ document.getElementById("startBtn").addEventListener("click", () => {
     return;
   }
 
-  // welcome → chat geçiş
   document.getElementById("pageWelcome").classList.add("hidden");
   document.getElementById("pageChat").classList.remove("hidden");
 
@@ -61,7 +69,6 @@ async function sendMessage() {
   input.value = "";
 
   renderChat();
-
   document.getElementById("apiStatus").innerText = "thinking...";
 
   try {
@@ -75,15 +82,19 @@ async function sendMessage() {
 
     const data = await res.json();
 
-    const reply = data.choices?.[0]?.message?.content || "Error";
+    if (!data.choices) {
+      console.error("API ERROR:", data);
+      alert("API error. Check console.");
+      return;
+    }
+
+    const reply = data.choices[0].message.content;
 
     messages.push({ role: "assistant", content: reply });
 
     renderChat();
-
     document.getElementById("apiStatus").innerText = "ready";
 
-    // 🔥 ANALYSIS POPUP AÇ
     openAnalysis(reply);
 
   } catch (err) {
@@ -124,15 +135,14 @@ document.getElementById("saveReturnBtn").addEventListener("click", () => {
 
   document.getElementById("analysisOverlay").classList.add("hidden");
 
-  // temizle
   document.getElementById("reasoning").value = "";
   document.getElementById("nextIntent").value = "";
 });
 
-// 📤 SUBMIT (EN KRİTİK)
+// 📤 SUBMIT (student gönderir)
 async function submitChat() {
   const user = getUser();
-  const classId = getClassId();
+  const classId = getClassId(user);
 
   try {
     await fetch(`${API_URL}/api/save`, {
@@ -156,5 +166,30 @@ async function submitChat() {
   }
 }
 
-// 🌍 GLOBAL expose (index için)
+// 👨‍🏫 EDUCATOR PANEL (console’da görür)
+async function loadClassData() {
+  const user = getUser();
+
+  if (user.role !== "educator") return;
+
+  const classId = getClassId(user);
+
+  const res = await fetch(`${API_URL}/api/class/${classId}`);
+  const data = await res.json();
+
+  console.log("📊 STUDENT DATA:", data);
+  alert("Educator view loaded → check console");
+}
+
+// 🌍 INIT
+window.onload = () => {
+  const user = getUser();
+  getClassId(user);
+
+  if (user.role === "educator") {
+    loadClassData();
+  }
+};
+
+// 🌍 GLOBAL expose
 window.submitChat = submitChat;
