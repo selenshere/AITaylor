@@ -19,23 +19,22 @@ You are Taylor, a student who thinks 1/4 + 1/6 = 1/10.
 Explain your reasoning simply and consistently.
 `;
 
-app.post("/api/chat", async (req, res) => {
-  const { messages } = req.body;
+app.post("/api/submit", async (req, res) => {
+  const { user_id, user_name, role, class_id, messages } = req.body;
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        ...messages,
-      ],
-    }),
+  const { error } = await supabase.from("submissions").insert({
+    user_id,
+    user_name,
+    role,
+    class_id,
+    messages,
+    status: "submitted"
   });
+
+  if (error) return res.status(500).json(error);
+
+  res.json({ ok: true });
+});
 
   const data = await response.json();
   res.json(data);
