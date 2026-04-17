@@ -2,37 +2,64 @@ const API = "https://aitaylor.onrender.com";
 
 let user, classId, messages = [];
 
-function start() {
-  const name = document.getElementById("name").value;
-  const role = document.getElementById("role").value;
+// 🔐 USER
+function initUser() {
+  let saved = localStorage.getItem("user");
 
-  user = {
-    id: crypto.randomUUID(),
-    name,
-    role
-  };
+  if (!saved) {
+    const name = prompt("Enter your name:");
+    const role = prompt("Role: educator or student");
 
-  if (role === "educator") {
-    classId = "class-" + Math.floor(Math.random()*10000);
-    alert("Class code: " + classId);
+    user = {
+      id: crypto.randomUUID(),
+      name,
+      role
+    };
+
+    localStorage.setItem("user", JSON.stringify(user));
+  } else {
+    user = JSON.parse(saved);
+  }
+}
+
+// 🏫 CLASS (KALICI)
+function setupClass() {
+  let savedClass = localStorage.getItem("class_id");
+
+  if (savedClass) {
+    classId = savedClass;
+    return;
+  }
+
+  if (user.role === "educator") {
+    classId = "class-" + Math.floor(Math.random() * 10000);
+    alert("Your class code: " + classId);
   } else {
     classId = prompt("Enter class code:");
   }
 
+  localStorage.setItem("class_id", classId);
+}
+
+// 🚀 START
+function start() {
   document.getElementById("login").style.display = "none";
   document.getElementById("app").style.display = "block";
 
   document.getElementById("info").innerText =
-    `${user.name} (${role}) | Class: ${classId}`;
+    `${user.name} (${user.role}) | Class: ${classId}`;
 
-  if (role === "educator") {
+  if (user.role === "educator") {
     document.getElementById("dashboard").style.display = "block";
     document.getElementById("chatSection").style.display = "none";
   }
 }
 
+// 📩 SEND MESSAGE
 async function send() {
   const text = document.getElementById("msg").value;
+
+  if (!text) return;
 
   messages.push({ role: "user", content: text });
 
@@ -50,11 +77,23 @@ async function send() {
   render();
 }
 
+// 💬 CHAT UI (SENİN İSTEDİĞİN STYLE)
 function render() {
   document.getElementById("chat").innerHTML =
-    messages.map(m => `<p><b>${m.role}:</b> ${m.content}</p>`).join("");
+    messages.map(m => `
+      <div style="
+        margin:10px;
+        padding:10px;
+        border-radius:10px;
+        max-width:70%;
+        ${m.role === "user" ? "background:#d1e7ff; margin-left:auto;" : "background:#eee;"}
+      ">
+        ${m.content}
+      </div>
+    `).join("");
 }
 
+// 📤 SUBMIT
 async function submit() {
   await fetch(API + "/api/submit", {
     method:"POST",
@@ -71,24 +110,23 @@ async function submit() {
   alert("Submitted!");
 }
 
+// 👨‍🏫 DASHBOARD
 async function loadSubmissions() {
   const res = await fetch(API + "/api/submissions/" + classId);
   const data = await res.json();
 
-  // stats
-  const total = data.length;
-  const uniqueStudents = [...new Set(data.map(d => d.user_name))];
+  const students = [...new Set(data.map(d => d.user_name))];
 
   document.getElementById("submissions").innerHTML = `
-    <h3>Class Stats</h3>
-    <p>Total submissions: ${total}</p>
-    <p>Students submitted: ${uniqueStudents.length}</p>
+    <h3>📊 Class Stats</h3>
+    <p>Total submissions: ${data.length}</p>
+    <p>Students submitted: ${students.length}</p>
 
-    <h3>Submissions</h3>
+    <h3>🧑‍🎓 Submissions</h3>
     ${data.map(d => `
       <div style="border:1px solid #ccc; margin:10px; padding:10px;">
         <b>${d.user_name}</b>
-        <button onclick='toggleChat("${d.id}")'>View</button>
+        <button onclick='toggle("${d.id}")'>View</button>
 
         <div id="chat-${d.id}" style="display:none">
           ${d.messages.map(m => `
@@ -100,7 +138,14 @@ async function loadSubmissions() {
   `;
 }
 
-function toggleChat(id) {
+function toggle(id) {
   const el = document.getElementById("chat-" + id);
   el.style.display = el.style.display === "none" ? "block" : "none";
 }
+
+// 🌍 INIT
+window.onload = () => {
+  initUser();
+  setupClass();
+  start();
+};
