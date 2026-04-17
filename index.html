@@ -1,152 +1,41 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Taylor Task Chatbot</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8"/>
+  <title>Taylor System</title>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">Taylor Task</div>
-    <div class="right">
-      <button id="submitBtn" class="primaryBtn"> Finish & Submit </button>
-      <button id="downloadBtn" class="btn secondary" title="Download all data">Download</button>
-    </div>
-  </header>
 
-  <!-- PAGE 1 -->
-  <main id="pageWelcome" class="page">
-    <section class="card">
-      <h1>Welcome to the Taylor task</h1>
-      <p>
-        In this activity, you will interact with Taylor, a simulated student who has solved the fraction problem
-        that you looked at last week. Your task is to design activities and questions to understand Taylor’s thinking.
-      </p>
-    </section>
+<h2>Taylor System</h2>
 
-    <div class="welcomeGrid">
-      <section class="card taskCard">
-        <h2>Task and Taylor's solution</h2>
-        <div class="taskImageWrapper">
-          <img src="images/task.png" alt="Task image" />
-        </div>
-      </section>
+<div id="login">
+  <input id="name" placeholder="Your name"/>
+  <select id="role">
+    <option value="student">Student</option>
+    <option value="educator">Educator</option>
+  </select>
+  <button onclick="start()">Start</button>
+</div>
 
-      <section class="card">
-        <h2>Before you start</h2>
+<div id="app" style="display:none">
 
-        <div class="nameRow">
-          <label class="q">
-            <span>First name</span>
-            <input id="firstName" type="text" />
-          </label>
-          <label class="q">
-            <span>Last name</span>
-            <input id="lastName" type="text" />
-          </label>
-        </div>
+  <div id="info"></div>
 
-        <label class="q">
-          <span>1) What would you most like to understand?</span>
-          <textarea id="q1" rows="4"></textarea>
-        </label>
-
-        <label class="q">
-          <span>2) First message to Taylor</span>
-          <textarea id="q3" rows="3"></textarea>
-        </label>
-
-        <div class="row">
-          <button id="startBtn" class="btn primary">Start Chat</button>
-          <div id="formError" class="error"></div>
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <!-- PAGE 2 -->
-  <main id="pageChat" class="page hidden">
-    <div class="layout">
-
-      <!-- LEFT -->
-      <section class="card taskCard taskPane">
-        <h2>Task</h2>
-        <div class="taskImageWrapper">
-          <img src="images/task.png" />
-        </div>
-
-        <div id="analysisOverlay" class="overlay hidden">
-          <div class="overlayCard">
-            <h2>Analysis</h2>
-
-            <div class="selectedBox">
-              <div id="selectedText"></div>
-            </div>
-
-            <textarea id="reasoning" placeholder="Reasoning..."></textarea>
-            <textarea id="nextIntent" placeholder="Next step..."></textarea>
-
-            <button id="saveReturnBtn" class="btn primary">
-              Save and return
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- RIGHT CHAT -->
-      <section class="card chat">
-        <div class="chatHeader">
-          <h2>Chat with Taylor</h2>
-          <span id="apiStatus" class="pill">ready</span>
-        </div>
-
-        <div id="chatLog" class="chatLog"></div>
-
-        <div class="composer">
-          <textarea id="userInput"></textarea>
-          <button id="sendBtn" class="btn primary">Send</button>
-        </div>
-      </section>
-
-    </div>
-  </main>
-
-  <footer class="footer">
-    <span>Data is stored locally in your browser.</span>
-  </footer>
-
-  <div id="userInfo" style="text-align:center; margin:10px;">
+  <div id="chatSection">
+    <textarea id="msg"></textarea>
+    <button onclick="send()">Send</button>
+    <div id="chat"></div>
+    <button onclick="submit()">Submit</button>
   </div>
 
-  <!-- APP -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <script src="app.js"></script>
+  <div id="dashboard" style="display:none">
+    <h3>Educator Dashboard</h3>
+    <button onclick="loadSubmissions()">Refresh</button>
+    <div id="submissions"></div>
+  </div>
 
-  <script>
-    document.getElementById("submitBtn").addEventListener("click", async () => {
-      if (!window.submitChat) {
-        alert("Submit function not ready");
-        return;
-      }
+</div>
 
-      try {
-        await window.submitChat();
-      } catch (e) {
-        console.error(e);
-        alert("Submit failed");
-      }
-    });
-  setTimeout(() => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const classId = localStorage.getItem("class_id");
-
-    if (user.name) {
-      document.getElementById("userInfo").innerText =
-        `User: ${user.name} (${user.role}) | Class: ${classId}`;
-    }
-  }, 500);
-  </script>
-
+<script src="app.js"></script>
 </body>
 </html>
