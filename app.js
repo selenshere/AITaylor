@@ -133,7 +133,7 @@ messages.push({ role: "assistant", content: reply });
 
 renderChat();
 
-// analysis popup
+// ANALYSIS POPUP
 const selected = document.getElementById("selectedText");
 const overlay = document.getElementById("analysisOverlay");
 
@@ -209,6 +209,7 @@ console.error(err);
 }
 }
 
+// ================= VIEW =================
 function viewStudent(msgs) {
 alert(msgs.map(m => m.content).join("\n"));
 }
