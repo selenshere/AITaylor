@@ -4,7 +4,19 @@ let user = {};
 let classId = null;
 let messages = [];
 
-// 🔥 SESSION RESTORE
+// 🔥 UNIQUE USER
+function getUserId() {
+  let id = localStorage.getItem("user_id");
+
+  if (!id) {
+    id = "user-" + Math.random().toString(36).substring(2);
+    localStorage.setItem("user_id", id);
+  }
+
+  return id;
+}
+
+// 🔥 SESSION
 function restoreSession() {
   const saved = localStorage.getItem("session");
   if (!saved) return false;
@@ -16,15 +28,11 @@ function restoreSession() {
   return true;
 }
 
-// 🔥 SAVE SESSION
 function saveSession() {
-  localStorage.setItem("session", JSON.stringify({
-    user,
-    classId
-  }));
+  localStorage.setItem("session", JSON.stringify({ user, classId }));
 }
 
-// ROLE SELECT
+// ROLE
 function chooseRole(role) {
   document.getElementById("entry").style.display = "none";
   const box = document.getElementById("auth");
@@ -54,7 +62,7 @@ function chooseRole(role) {
   }
 }
 
-// CREATE CLASS
+// CREATE
 async function createClass() {
   const teacher_name = document.getElementById("tname").value;
   const password = document.getElementById("tpass").value;
@@ -96,7 +104,7 @@ async function loginClass() {
   startApp();
 }
 
-// JOIN
+// JOIN (FIXED)
 async function joinClass() {
   const name = document.getElementById("sname").value;
   const class_id = document.getElementById("scode").value;
@@ -107,7 +115,7 @@ async function joinClass() {
     body: JSON.stringify({ name, class_id }),
   });
 
-  user = { name, role: "student" };
+  user = { name, role: "student", id: getUserId() };
   classId = class_id;
 
   saveSession();
@@ -131,13 +139,10 @@ function startApp() {
   }
 }
 
-// 🔥 DASHBOARD (FULL)
+// DASHBOARD (FIXED)
 async function loadDashboard() {
-  const res1 = await fetch(API + "/api/students/" + classId);
-  const students = await res1.json();
-
-  const res2 = await fetch(API + "/api/progress/" + classId);
-  const progress = await res2.json();
+  const students = await fetch(API + "/api/students/" + classId).then(r => r.json());
+  const progress = await fetch(API + "/api/progress/" + classId).then(r => r.json());
 
   document.getElementById("studentList").innerHTML = `
     <h3>Total: ${students.length}</h3>
@@ -158,7 +163,7 @@ async function loadDashboard() {
   `;
 }
 
-// 🔍 VIEW CHAT
+// VIEW
 function view(name) {
   fetch(API + "/api/progress/" + classId)
     .then(r => r.json())
@@ -191,7 +196,6 @@ async function sendMessage() {
 
   renderChat();
 
-  // 🔥 AUTOSAVE
   await fetch(API + "/api/progress/save", {
     method:"POST",
     headers:{ "Content-Type":"application/json" },
@@ -205,9 +209,7 @@ async function sendMessage() {
 
 // LOAD PROGRESS
 async function loadProgress() {
-  const res = await fetch(API + "/api/progress/" + classId);
-  const data = await res.json();
-
+  const data = await fetch(API + "/api/progress/" + classId).then(r => r.json());
   const mine = data.find(d => d.student_name === user.name);
 
   if (mine) {
@@ -222,7 +224,7 @@ function renderChat() {
     messages.map(m => `<p><b>${m.role}:</b> ${m.content}</p>`).join("");
 }
 
-// SUBMIT
+// SUBMIT (FIXED)
 async function submitChat() {
   await fetch(API + "/api/submit", {
     method: "POST",
