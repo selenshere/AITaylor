@@ -2,136 +2,109 @@
 
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Taylor Task Chatbot</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Taylor Task</title>
+<link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
 <!-- ROLE -->
 
-<div id="roleScreen" class="page">
-  <section class="card">
-    <h2>Enter</h2>
-    <button onclick="enterRole('educator')">Educator</button>
-    <button onclick="enterRole('student')">Student</button>
-  </section>
+<div id="roleScreen" class="centerBox">
+  <h2>Enter</h2>
+  <button onclick="enterRole('student')">Student</button>
+  <button onclick="enterRole('educator')">Educator</button>
 </div>
 
-<!-- EDUCATOR -->
+<!-- ================= STUDENT ================= -->
 
-<div id="educatorScreen" class="page hidden">
-  <section class="card">
-    <h2>Educator Dashboard</h2>
-    <input id="classInput" placeholder="Class code" />
-    <button onclick="loadClass()">Load Class</button>
-    <div id="studentsList"></div>
-  </section>
-</div>
-
-<!-- STUDENT -->
-
-<div id="studentScreen" class="hidden">
+<div id="studentApp" class="hidden">
 
 <header class="topbar">
-  <div class="brand">Taylor Task</div>
-  <div class="right">
-    <button id="submitBtn" class="primaryBtn">Finish & Submit</button>
-  </div>
+  <div>Taylor Task</div>
+  <button id="submitBtn">Finish & Submit</button>
 </header>
 
-<!-- PAGE 1 -->
+<!-- ===== FIRST PAGE ===== -->
 
-<main id="pageWelcome" class="page">
-  <section class="card">
-    <h1>Welcome to the Taylor task</h1>
-    <p>
-      In this activity, you will interact with Taylor, a simulated student who has solved the fraction problem.
-    </p>
-  </section>
+<main id="page1" class="page">
 
-  <div class="welcomeGrid">
+  <div class="grid">
 
 ```
-<section class="card taskCard">
-  <h2>Task</h2>
-  <div class="taskImageWrapper">
-    <img src="images/task.png" />
-  </div>
-</section>
-
-<section class="card">
-
-  <input id="studentName" placeholder="Your name" />
-  <input id="classCode" placeholder="Class code" />
-
-  <label class="q">
-    <span>1) What would you most like to understand?</span>
-    <textarea id="q1"></textarea>
-  </label>
-
-  <label class="q">
-    <span>2) First message to Taylor</span>
-    <textarea id="q3"></textarea>
-  </label>
-
-  <button id="startBtn" class="btn primary">Start Chat</button>
-
-</section>
-```
-
-  </div>
-</main>
-
-<!-- PAGE 2 -->
-
-<main id="pageChat" class="page hidden">
-  <div class="layout">
-
-```
-<section class="card taskCard taskPane">
+<!-- LEFT -->
+<div class="card">
+  <h3>Task</h3>
   <img src="images/task.png" />
-</section>
-
-<section class="card chat">
-  <div class="chatHeader">
-    <h2>Chat with Taylor</h2>
-  </div>
-
-  <div id="chatLog" class="chatLog"></div>
-
-  <div class="composer">
-    <textarea id="userInput"></textarea>
-    <button id="sendBtn" class="btn primary">Send</button>
-  </div>
-</section>
-```
-
-  </div>
-</main>
-
-<!-- ANALYSIS -->
-
-<div id="analysisOverlay" class="overlay hidden">
-  <div class="overlayCard">
-
-```
-<h2>Analysis</h2>
-
-<div id="selectedText"></div>
-
-<textarea id="reasoning"></textarea>
-<textarea id="nextIntent"></textarea>
-
-<button id="saveReturnBtn" class="btn primary">
-  Continue
-</button>
-```
-
-  </div>
 </div>
 
+<!-- RIGHT -->
+<div class="card">
+
+  <input id="studentName" placeholder="First name" />
+  <input id="classCode" placeholder="Class code" />
+
+  <textarea id="q1" placeholder="What do you want to understand?"></textarea>
+  <textarea id="q3" placeholder="First message"></textarea>
+
+  <button id="startBtn">Start Chat</button>
+
+</div>
+```
+
+  </div>
+
+</main>
+
+<!-- ===== SECOND PAGE ===== -->
+
+<main id="page2" class="page hidden">
+
+  <div class="grid">
+
+```
+<!-- LEFT ANALYSIS -->
+<div class="card">
+  <h3>Analysis</h3>
+
+  <div id="selectedText"></div>
+
+  <textarea id="reasoning" placeholder="Reasoning"></textarea>
+  <textarea id="nextIntent" placeholder="Next step"></textarea>
+
+  <button id="saveReturnBtn">Continue</button>
+</div>
+
+<!-- RIGHT CHAT -->
+<div class="card">
+
+  <h3>Chat with Taylor</h3>
+
+  <div id="chatLog"></div>
+
+  <textarea id="userInput"></textarea>
+  <button id="sendBtn">Send</button>
+
+</div>
+```
+
+  </div>
+
+</main>
+
+</div>
+
+<!-- ================= EDUCATOR ================= -->
+
+<div id="educatorApp" class="hidden centerBox">
+  <h2>Educator</h2>
+
+  <input id="classInput" placeholder="Class code"/>
+  <button onclick="loadClass()">Load</button>
+
+  <div id="studentsList"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
