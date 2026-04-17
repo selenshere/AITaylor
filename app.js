@@ -1,151 +1,162 @@
 const API = "https://aitaylor.onrender.com";
 
-let user, classId, messages = [];
+let user = {};
+let classId = null;
+let messages = [];
 
-// 🔐 USER
-function initUser() {
-  let saved = localStorage.getItem("user");
+// ROLE SELECT
+function chooseRole(role) {
+  document.getElementById("entry").style.display = "none";
+  const box = document.getElementById("auth");
+  box.style.display = "block";
 
-  if (!saved) {
-    const name = prompt("Enter your name:");
-    const role = prompt("Role: educator or student");
+  if (role === "educator") {
+    box.innerHTML = `
+      <h3>Create Class</h3>
+      <input id="tname" placeholder="Name">
+      <input id="tpass" placeholder="Password">
+      <button onclick="createClass()">Create</button>
 
-    user = {
-      id: crypto.randomUUID(),
-      name,
-      role
-    };
+      <h3>Login</h3>
+      <input id="cid" placeholder="Class code">
+      <input id="lpass" placeholder="Password">
+      <button onclick="loginClass()">Login</button>
+    `;
+  }
 
-    localStorage.setItem("user", JSON.stringify(user));
-  } else {
-    user = JSON.parse(saved);
+  if (role === "student") {
+    box.innerHTML = `
+      <h3>Join</h3>
+      <input id="sname" placeholder="Name">
+      <input id="scode" placeholder="Class code">
+      <button onclick="joinClass()">Join</button>
+    `;
   }
 }
 
-// 🏫 CLASS (KALICI)
-function setupClass() {
-  let savedClass = localStorage.getItem("class_id");
+// CREATE CLASS
+async function createClass() {
+  const teacher_name = document.getElementById("tname").value;
+  const password = document.getElementById("tpass").value;
 
-  if (savedClass) {
-    classId = savedClass;
-    return;
-  }
+  const res = await fetch(API + "/api/class/create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ teacher_name, password }),
+  });
 
-  if (user.role === "educator") {
-    classId = "class-" + Math.floor(Math.random() * 10000);
-    alert("Your class code: " + classId);
-  } else {
-    classId = prompt("Enter class code:");
-  }
+  const data = await res.json();
 
-  localStorage.setItem("class_id", classId);
+  user = { name: teacher_name, role: "educator" };
+  classId = data.classId;
+
+  alert("Class: " + classId);
+
+  startApp();
 }
 
-// 🚀 START
-function start() {
-  document.getElementById("login").style.display = "none";
+// LOGIN
+async function loginClass() {
+  const class_id = document.getElementById("cid").value;
+  const password = document.getElementById("lpass").value;
+
+  const res = await fetch(API + "/api/class/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ classId: class_id, password }),
+  });
+
+  const data = await res.json();
+
+  user = { name: data.teacher_name, role: "educator" };
+  classId = class_id;
+
+  startApp();
+}
+
+// JOIN
+async function joinClass() {
+  const name = document.getElementById("sname").value;
+  const class_id = document.getElementById("scode").value;
+
+  await fetch(API + "/api/student/join", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, class_id }),
+  });
+
+  user = { name, role: "student" };
+  classId = class_id;
+
+  startApp();
+}
+
+// START
+function startApp() {
+  document.getElementById("auth").style.display = "none";
   document.getElementById("app").style.display = "block";
 
   document.getElementById("info").innerText =
-    `${user.name} (${user.role}) | Class: ${classId}`;
+    `${user.name} | ${user.role} | ${classId}`;
 
   if (user.role === "educator") {
+    loadStudents();
     document.getElementById("dashboard").style.display = "block";
     document.getElementById("chatSection").style.display = "none";
   }
 }
 
-// 📩 SEND MESSAGE
-async function send() {
-  const text = document.getElementById("msg").value;
+// LOAD STUDENTS
+async function loadStudents() {
+  const res = await fetch(API + "/api/students/" + classId);
+  const data = await res.json();
 
-  if (!text) return;
+  document.getElementById("studentList").innerHTML =
+    data.map(s => `<p>${s.name}</p>`).join("");
+}
+
+// CHAT
+async function sendMessage() {
+  const input = document.getElementById("userInput");
+  const text = input.value;
 
   messages.push({ role: "user", content: text });
+  input.value = "";
+
+  renderChat();
 
   const res = await fetch(API + "/api/chat", {
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
     body: JSON.stringify({ messages })
   });
 
   const data = await res.json();
+
   const reply = data.choices[0].message.content;
 
-  messages.push({ role:"assistant", content: reply });
+  messages.push({ role: "assistant", content: reply });
 
-  render();
+  renderChat();
 }
 
-// 💬 CHAT UI (SENİN İSTEDİĞİN STYLE)
-function render() {
-  document.getElementById("chat").innerHTML =
-    messages.map(m => `
-      <div style="
-        margin:10px;
-        padding:10px;
-        border-radius:10px;
-        max-width:70%;
-        ${m.role === "user" ? "background:#d1e7ff; margin-left:auto;" : "background:#eee;"}
-      ">
-        ${m.content}
-      </div>
-    `).join("");
+// RENDER
+function renderChat() {
+  document.getElementById("chatLog").innerHTML =
+    messages.map(m => `<p><b>${m.role}:</b> ${m.content}</p>`).join("");
 }
 
-// 📤 SUBMIT
-async function submit() {
+// SUBMIT
+async function submitChat() {
   await fetch(API + "/api/submit", {
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
     body: JSON.stringify({
-      user_id: user.id,
-      user_name: user.name,
-      role: user.role,
+      student_name: user.name,
       class_id: classId,
       messages
     })
   });
 
-  alert("Submitted!");
+  alert("Submitted");
 }
-
-// 👨‍🏫 DASHBOARD
-async function loadSubmissions() {
-  const res = await fetch(API + "/api/submissions/" + classId);
-  const data = await res.json();
-
-  const students = [...new Set(data.map(d => d.user_name))];
-
-  document.getElementById("submissions").innerHTML = `
-    <h3>📊 Class Stats</h3>
-    <p>Total submissions: ${data.length}</p>
-    <p>Students submitted: ${students.length}</p>
-
-    <h3>🧑‍🎓 Submissions</h3>
-    ${data.map(d => `
-      <div style="border:1px solid #ccc; margin:10px; padding:10px;">
-        <b>${d.user_name}</b>
-        <button onclick='toggle("${d.id}")'>View</button>
-
-        <div id="chat-${d.id}" style="display:none">
-          ${d.messages.map(m => `
-            <p><b>${m.role}:</b> ${m.content}</p>
-          `).join("")}
-        </div>
-      </div>
-    `).join("")}
-  `;
-}
-
-function toggle(id) {
-  const el = document.getElementById("chat-" + id);
-  el.style.display = el.style.display === "none" ? "block" : "none";
-}
-
-// 🌍 INIT
-window.onload = () => {
-  initUser();
-  setupClass();
-  start();
-};
