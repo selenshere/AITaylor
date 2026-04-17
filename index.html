@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -10,160 +9,79 @@
 
 <body>
 
-<!-- ENTRY -->
-
 <div id="entry" class="card">
   <h2>Enter</h2>
   <button onclick="chooseRole('educator')">Educator</button>
   <button onclick="chooseRole('student')">Student</button>
 </div>
 
-<!-- AUTH (Student giriş ekranı) -->
-
-<div id="auth" class="card" style="display:none">
-  <h3>Student Login</h3>
-
-  <label>
-    Name
-    <input id="studentName" type="text" placeholder="Your name">
-  </label>
-
-  <label>
-    Class Code
-    <input id="classCode" type="text" placeholder="Enter class code">
-  </label>
-
-<button onclick="enterApp()">Continue</button>
-
-</div>
-
-<!-- APP -->
+<div id="auth" class="card" style="display:none"></div>
 
 <div id="app" style="display:none">
 
   <div id="info"></div>
-
-  <!-- DASHBOARD (Educator için kalır) -->
 
   <div id="dashboard" class="card" style="display:none">
     <h3>Students</h3>
     <div id="studentList"></div>
   </div>
 
-  <!-- HEADER -->
-
   <header class="topbar">
     <div class="brand">Taylor Task</div>
-    <div class="right">
-      <button id="submitBtn" class="primaryBtn">Finish & Submit</button>
-      <button id="downloadBtn" class="btn secondary">Download</button>
+    <div>
+      <button id="submitBtn">Finish & Submit</button>
     </div>
   </header>
 
-  <!-- PAGE 1 -->
-
   <main id="pageWelcome" class="page">
-    <section class="card">
+    <div class="card">
       <h1>Welcome to the Taylor task</h1>
-      <p>
-        In this activity, you will interact with Taylor, a simulated student who has solved the fraction problem
-        that you looked at last week (see the figure below for reference). Your task is to design activities, questions,
-        and/or representations to uncover Taylor’s underlying thinking.
-      </p>
-    </section>
-
-```
-<div class="welcomeGrid">
-  <section class="card taskCard">
-    <h2>Task and Taylor's solution (fractions)</h2>
-    <p class="muted">Please review the task and Taylor’s solution below before starting.</p>
-    <div class="taskImageWrapper">
-      <img src="images/task.png" alt="Task image" />
-    </div>
-  </section>
-
-  <section class="card">
-    <h2>Before you start</h2>
-
-    <div class="nameRow">
-      <label class="q">
-        <span>First name</span>
-        <input id="firstName" type="text">
-      </label>
-      <label class="q">
-        <span>Last name</span>
-        <input id="lastName" type="text">
-      </label>
     </div>
 
-    <label class="q">
-      <span>1) What would you most like to understand more deeply about Taylor’s thinking?</span>
-      <textarea id="q1"></textarea>
-    </label>
+    <div class="welcomeGrid">
+      <div class="card">
+        <img src="images/task.png" style="width:100%">
+      </div>
 
-    <label class="q">
-      <span>2) Please write your first message to Taylor.</span>
-      <textarea id="q3"></textarea>
-    </label>
-
-    <button id="startBtn" class="btn primary">Start Chat</button>
-    <div id="formError" class="error"></div>
-  </section>
-</div>
-```
-
+      <div class="card">
+        <input id="firstName" placeholder="First name">
+        <input id="lastName" placeholder="Last name">
+        <textarea id="q1" placeholder="Question"></textarea>
+        <textarea id="q3" placeholder="First message"></textarea>
+        <button id="startBtn">Start Chat</button>
+        <div id="formError"></div>
+      </div>
+    </div>
   </main>
-
-  <!-- PAGE 2 -->
 
   <main id="pageChat" class="page hidden">
     <div class="layout">
 
-```
-  <!-- LEFT -->
-  <section class="card taskCard taskPane">
-    <h2>Task and Taylor's solution (fractions)</h2>
-    <div class="taskImageWrapper">
-      <img src="images/task.png" alt="Task and Taylor's solution">
-    </div>
+      <div class="card">
+        <img src="images/task.png" style="width:100%">
 
-    <!-- ANALYSIS -->
-    <div id="analysisOverlay" class="overlay hidden">
-      <div class="overlayCard">
-        <h2>Analysis</h2>
-
-        <div id="selectedText"></div>
-
-        <textarea id="reasoning" placeholder="Reasoning"></textarea>
-        <textarea id="nextIntent" placeholder="Next step"></textarea>
-
-        <button id="saveReturnBtn">Save</button>
+        <div id="analysisOverlay" class="overlay hidden">
+          <div class="overlayCard">
+            <h2>Analysis</h2>
+            <div id="selectedText"></div>
+            <textarea id="reasoning"></textarea>
+            <textarea id="nextIntent"></textarea>
+            <button id="saveReturnBtn">Save</button>
+          </div>
+        </div>
       </div>
+
+      <div class="card chat">
+        <div id="chatLog"></div>
+        <textarea id="userInput"></textarea>
+        <button id="sendBtn">Send</button>
+      </div>
+
     </div>
-  </section>
-
-  <!-- RIGHT -->
-  <section class="card chat">
-    <h2>Chat with Taylor</h2>
-
-    <div id="chatLog"></div>
-
-    <textarea id="userInput"></textarea>
-    <button id="sendBtn">Send</button>
-  </section>
-
-</div>
-```
-
   </main>
-
-  <footer class="footer">
-    <span>Data is stored locally in your browser.</span>
-  </footer>
 
 </div>
 
 <script src="app.js"></script>
-
 </body>
 </html>
