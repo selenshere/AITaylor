@@ -1,0 +1,33 @@
+body {
+  font-family: sans-serif;
+  background: #f5f5f5;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 400px;
+  border: 1px solid #ddd;
+}
+
+button {
+  background: black;
+  color: white;
+  padding: 10px;
+  margin: 5px 0;
+  width: 100%;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+}
+
+#chatLog {
+  height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}
