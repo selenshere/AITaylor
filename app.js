@@ -1,9 +1,9 @@
 const API_URL = "https://aitaylor.onrender.com";
 
-// 🔥 SUPABASE (DOĞRU)
+// 🌍 SUPABASE
 const client = window.supabase.createClient(
   "https://xrxbjcfmljimozznnvmy.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyeGJqY2ZtbGppbW96em5udm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0MzM2MjgsImV4cCI6MjA5MjAwOTYyOH0.Y9QvsAkD1FeAvRJrQTNdy59ridkXYQO1nfPul1LF34o"
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 );
 
 let messages = [];
@@ -11,39 +11,38 @@ let user = null;
 let classId = null;
 let assignmentId = null;
 
-// 🔐 LOGIN
-async function initAuth() {
-  const { data } = await client.auth.getUser();
+// 🔐 BASİT LOGIN (username + role)
+function initUser() {
+  let saved = localStorage.getItem("user");
 
-  if (!data.user) {
-    const email = prompt("Email:");
-    const password = prompt("Password:");
+  if (!saved) {
+    const name = prompt("Enter your name:");
     const role = prompt("Role: educator or student");
 
-    const { data: signUp } = await client.auth.signUp({
-      email,
-      password,
-    });
+    user = {
+      id: crypto.randomUUID(),
+      name,
+      role
+    };
 
-    user = signUp.user;
-
-    await client.from("users").insert({
-      id: user.id,
-      role,
-      name: email
-    });
-
+    localStorage.setItem("user", JSON.stringify(user));
   } else {
-    user = data.user;
+    user = JSON.parse(saved);
   }
 }
 
-// 🏫 CLASS
-function getClass() {
+// 🏫 CLASS SYSTEM
+function setupClass() {
   classId = localStorage.getItem("class_id");
 
   if (!classId) {
-    classId = prompt("Enter class code:");
+    if (user.role === "educator") {
+      classId = "class-" + Math.floor(Math.random() * 10000);
+      alert("Your class code: " + classId);
+    } else {
+      classId = prompt("Enter class code:");
+    }
+
     localStorage.setItem("class_id", classId);
   }
 }
@@ -59,7 +58,6 @@ async function loadAssignments() {
   }
 
   assignmentId = data[0].id;
-  alert("Assigned: " + data[0].title);
 }
 
 // 🚀 START CHAT
@@ -124,9 +122,11 @@ document.getElementById("saveReturnBtn").addEventListener("click", () => {
 async function submitChat() {
   await fetch(`${API_URL}/api/submit`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {"Content-Type": "application/json"},
     body: JSON.stringify({
       user_id: user.id,
+      user_name: user.name,
+      role: user.role,
       class_id: classId,
       assignment_id: assignmentId,
       messages
@@ -136,12 +136,11 @@ async function submitChat() {
   alert("Submitted!");
 }
 
-// 🔘 SUBMIT BUTTON
 document.getElementById("submitBtn").addEventListener("click", submitChat);
 
 // 🌍 INIT
 window.onload = async () => {
-  await initAuth();
-  getClass();
+  initUser();
+  setupClass();
   await loadAssignments();
 };
