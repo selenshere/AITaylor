@@ -1,9 +1,9 @@
 const API_URL = "https://aitaylor.onrender.com";
 
-// 🌍 SUPABASE
-const supabase = window.supabase.createClient(
+// 🔥 SUPABASE (DOĞRU)
+const client = window.supabase.createClient(
   "https://xrxbjcfmljimozznnvmy.supabase.co",
-  "PASTE_ANON_KEY"
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyeGJqY2ZtbGppbW96em5udm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0MzM2MjgsImV4cCI6MjA5MjAwOTYyOH0.Y9QvsAkD1FeAvRJrQTNdy59ridkXYQO1nfPul1LF34o"
 );
 
 let messages = [];
@@ -11,23 +11,23 @@ let user = null;
 let classId = null;
 let assignmentId = null;
 
-// 🔐 LOGIN (AUTO)
+// 🔐 LOGIN
 async function initAuth() {
-  const { data } = await supabase.auth.getUser();
+  const { data } = await client.auth.getUser();
 
   if (!data.user) {
     const email = prompt("Email:");
     const password = prompt("Password:");
     const role = prompt("Role: educator or student");
 
-    const { data: signUp } = await supabase.auth.signUp({
+    const { data: signUp } = await client.auth.signUp({
       email,
       password,
     });
 
     user = signUp.user;
 
-    await supabase.from("users").insert({
+    await client.from("users").insert({
       id: user.id,
       role,
       name: email
@@ -48,7 +48,7 @@ function getClass() {
   }
 }
 
-// 📚 LOAD ASSIGNMENTS
+// 📚 ASSIGNMENT
 async function loadAssignments() {
   const res = await fetch(`${API_URL}/api/assignments/${classId}`);
   const data = await res.json();
@@ -59,12 +59,11 @@ async function loadAssignments() {
   }
 
   assignmentId = data[0].id;
-
   alert("Assigned: " + data[0].title);
 }
 
 // 🚀 START CHAT
-document.getElementById("startBtn").addEventListener("click", async () => {
+document.getElementById("startBtn").addEventListener("click", () => {
   const firstMsg = document.getElementById("q3").value;
 
   if (!firstMsg) return alert("Write first message");
@@ -92,7 +91,7 @@ async function sendMessage() {
 
   const res = await fetch(`${API_URL}/api/chat`, {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ messages }),
   });
 
@@ -107,11 +106,8 @@ async function sendMessage() {
 
 // 🖥️ CHAT
 function renderChat() {
-  const chatLog = document.getElementById("chatLog");
-
-  chatLog.innerHTML = messages
-    .map(m => `<p><b>${m.role}:</b> ${m.content}</p>`)
-    .join("");
+  document.getElementById("chatLog").innerHTML =
+    messages.map(m => `<p><b>${m.role}:</b> ${m.content}</p>`).join("");
 }
 
 // 🧠 ANALYSIS
@@ -128,7 +124,7 @@ document.getElementById("saveReturnBtn").addEventListener("click", () => {
 async function submitChat() {
   await fetch(`${API_URL}/api/submit`, {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       user_id: user.id,
       class_id: classId,
