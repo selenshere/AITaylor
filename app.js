@@ -4,7 +4,7 @@ const API_URL = "https://aitaylor.onrender.com";
 // 🌍 SUPABASE
 const supabase = window.supabase.createClient(
 "https://xrxbjcfmljimozznnvmy.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyeGJqY2ZtbGppbW96em5udm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0MzM2MjgsImV4cCI6MjA5MjAwOTYyOH0.Y9QvsAkD1FeAvRJrQTNdy59ridkXYQO1nfPul1LF34o"
 );
 
 let messages = [];
