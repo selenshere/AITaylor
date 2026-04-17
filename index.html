@@ -1,84 +1,57 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Taylor System</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Taylor System</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div id="entry" class="card">
+<div id="entry" class="card center">
   <h2>Enter</h2>
-  <button onclick="chooseRole('educator')">Educator</button>
-  <button onclick="chooseRole('student')">Student</button>
+  <div class="row">
+    <button onclick="chooseRole('educator')">Educator</button>
+    <button onclick="chooseRole('student')">Student</button>
+  </div>
 </div>
 
 <div id="auth" class="card" style="display:none"></div>
 
 <div id="app" style="display:none">
 
-  <div id="info"></div>
+<header class="topbar">
+  <div class="brand">Taylor Task</div>
+  <button id="submitBtn">Finish & Submit</button>
+</header>
 
-  <div id="dashboard" class="card" style="display:none">
-    <h3>Students</h3>
-    <div id="studentList"></div>
+<div id="dashboard" class="card hidden">
+  <h3>Students</h3>
+  <div id="studentList"></div>
+</div>
+
+<main id="pageWelcome" class="page hidden">
+  <div class="card">
+    <h2>Welcome</h2>
+    <input id="firstName" placeholder="First name">
+    <input id="lastName" placeholder="Last name">
+    <textarea id="q3" placeholder="First message"></textarea>
+    <button id="startBtn">Start Chat</button>
   </div>
+</main>
 
-  <header class="topbar">
-    <div class="brand">Taylor Task</div>
-    <div>
-      <button id="submitBtn">Finish & Submit</button>
-    </div>
-  </header>
-
-  <main id="pageWelcome" class="page">
+<main id="pageChat" class="page hidden">
+  <div class="layout">
     <div class="card">
-      <h1>Welcome to the Taylor task</h1>
+      <img src="images/task.png" style="width:100%">
     </div>
-
-    <div class="welcomeGrid">
-      <div class="card">
-        <img src="images/task.png" style="width:100%">
-      </div>
-
-      <div class="card">
-        <input id="firstName" placeholder="First name">
-        <input id="lastName" placeholder="Last name">
-        <textarea id="q1" placeholder="Question"></textarea>
-        <textarea id="q3" placeholder="First message"></textarea>
-        <button id="startBtn">Start Chat</button>
-        <div id="formError"></div>
-      </div>
+    <div class="card chat">
+      <div id="chatLog"></div>
+      <textarea id="userInput"></textarea>
+      <button id="sendBtn">Send</button>
     </div>
-  </main>
-
-  <main id="pageChat" class="page hidden">
-    <div class="layout">
-
-      <div class="card">
-        <img src="images/task.png" style="width:100%">
-
-        <div id="analysisOverlay" class="overlay hidden">
-          <div class="overlayCard">
-            <h2>Analysis</h2>
-            <div id="selectedText"></div>
-            <textarea id="reasoning"></textarea>
-            <textarea id="nextIntent"></textarea>
-            <button id="saveReturnBtn">Save</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card chat">
-        <div id="chatLog"></div>
-        <textarea id="userInput"></textarea>
-        <button id="sendBtn">Send</button>
-      </div>
-
-    </div>
-  </main>
+  </div>
+</main>
 
 </div>
 
