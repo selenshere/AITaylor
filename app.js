@@ -3,6 +3,7 @@ const API="https://aitaylor.onrender.com";
 let role=null;
 let classId=null;
 let messages=[];
+let progressData=[];
 
 function chooseRole(r){
 role=r;
@@ -15,6 +16,7 @@ box.innerHTML=`
 <input id="tname" placeholder="Name">
 <input id="tpass" placeholder="Password">
 <button onclick="createClass()">Create Class</button>
+<hr>
 <input id="cid" placeholder="Class code">
 <input id="lpass" placeholder="Password">
 <button onclick="loginClass()">Login</button>
@@ -26,6 +28,7 @@ box.innerHTML=`
 <input id="sname" placeholder="Name">
 <input id="scode" placeholder="Class code">
 <button onclick="joinClass()">Join</button>
+<div id="errorMsg" style="color:red"></div>
 `;
 }
 }
@@ -42,6 +45,9 @@ body:JSON.stringify({teacher_name:name,password})
 
 const data=await res.json();
 alert("Class created: "+data.classId);
+
+classId=data.classId;
+startEducator();
 }
 
 async function loginClass(){
@@ -54,7 +60,7 @@ headers:{"Content-Type":"application/json"},
 body:JSON.stringify({classId:id,password})
 });
 
-if(!res.ok){alert("Wrong login");return;}
+if(!res.ok){alert("Wrong class code");return;}
 
 classId=id;
 startEducator();
@@ -70,7 +76,10 @@ headers:{"Content-Type":"application/json"},
 body:JSON.stringify({name,class_id:id})
 });
 
-if(!res.ok){alert("Class not found");return;}
+if(!res.ok){
+document.getElementById("errorMsg").innerText="Wrong class code";
+return;
+}
 
 classId=id;
 startStudent();
@@ -80,7 +89,8 @@ function startEducator(){
 document.getElementById("auth").style.display="none";
 document.getElementById("app").style.display="block";
 document.getElementById("dashboard").classList.remove("hidden");
-loadStudents();
+loadProgress();
+setInterval(loadProgress,3000);
 }
 
 function startStudent(){
@@ -89,11 +99,36 @@ document.getElementById("app").style.display="block";
 document.getElementById("pageWelcome").classList.remove("hidden");
 }
 
-async function loadStudents(){
-const res=await fetch(API+"/api/students/"+classId);
+async function loadProgress(){
+const res=await fetch(API+"/api/progress/"+classId);
 const data=await res.json();
+progressData=data;
+
 document.getElementById("studentList").innerHTML=
-data.map(s=>"<p>"+s.name+"</p>").join("");
+data.map(p=>`
+<div>
+<b onclick="openTranscript('${p.id}')">${p.student_name}</b>
+<button onclick="downloadTranscript('${p.id}')">Download</button>
+</div>
+`).join("");
+}
+
+function openTranscript(id){
+const item=progressData.find(p=>p.id==id);
+alert(item.messages.map(m=>m.role+": "+m.content).join("\n"));
+}
+
+function downloadTranscript(id){
+const item=progressData.find(p=>p.id==id);
+const text=item.messages.map(m=>m.role+": "+m.content).join("\n");
+
+const blob=new Blob([text]);
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement("a");
+a.href=url;
+a.download=item.student_name+".txt";
+a.click();
 }
 
 function renderChat(){
@@ -133,7 +168,16 @@ document.getElementById("pageChat").classList.remove("hidden");
 
 document.getElementById("sendBtn")?.addEventListener("click",sendMessage);
 
-document.getElementById("submitBtn")?.addEventListener("click",()=>{
-alert("Sent to educator dashboard (mock)");
+document.getElementById("submitBtn")?.addEventListener("click",async()=>{
+await fetch(API+"/api/submit",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+student_name:"student",
+class_id:classId,
+messages
+})
+});
+alert("Submitted to educator");
 });
 });
