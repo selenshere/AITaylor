@@ -8,7 +8,13 @@ let messages = [];
 function getUser() {
   let user = localStorage.getItem("user");
 
-  if (!user) {
+  try {
+    user = JSON.parse(user);
+  } catch {
+    user = null;
+  }
+
+  if (!user || typeof user !== "object") {
     const role = prompt("Enter role: educator or student");
 
     user = {
@@ -19,7 +25,7 @@ function getUser() {
     localStorage.setItem("user", JSON.stringify(user));
   }
 
-  return JSON.parse(user);
+  return user;
 }
 
 // 🏫 CLASS (teacher oluşturur, student girer)
