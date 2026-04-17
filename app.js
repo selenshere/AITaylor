@@ -7,10 +7,11 @@ const supabase = window.supabase.createClient(
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyeGJqY2ZtbGppbW96em5udm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0MzM2MjgsImV4cCI6MjA5MjAwOTYyOH0.Y9QvsAkD1FeAvRJrQTNdy59ridkXYQO1nfPul1LF34o"
 );
 
-// STATE
+// ================= STATE =================
 let messages = [];
 let studentName = "";
 let classId = "";
+let studentsData = [];
 
 // ================= INIT =================
 window.onload = () => {
@@ -85,6 +86,7 @@ const firstMsg = document.getElementById("q3").value;
 
   messages.push({ role: "user", content: firstMsg });
 
+  // öğrenci kaydet
   await supabase.from("students").upsert({
     name: studentName,
     class_id: classId
@@ -104,7 +106,7 @@ if (sendBtn) sendBtn.onclick = sendMessage;
 
 const submitBtn = document.getElementById("submitBtn");
 if (submitBtn) submitBtn.onclick = submitChat;
-};
+});
 
 // ================= SEND =================
 async function sendMessage() {
@@ -133,7 +135,7 @@ messages.push({ role: "assistant", content: reply });
 
 renderChat();
 
-// ANALYSIS POPUP
+// 🔥 ANALYSIS POPUP
 const selected = document.getElementById("selectedText");
 const overlay = document.getElementById("analysisOverlay");
 
@@ -190,14 +192,16 @@ const { data, error } = await supabase
 ```
 if (error) throw error;
 
+studentsData = data;
+
 const list = document.getElementById("studentsList");
 if (!list) return;
 
-list.innerHTML = data.map(s => `
+list.innerHTML = data.map((s, i) => `
   <div style="margin-bottom:10px; padding:10px; border:1px solid #ccc;">
     <b>${s.student_name}</b> → ${s.status}
     <br/>
-    <button onclick='viewStudent(${JSON.stringify(s.messages)})'>
+    <button onclick="viewStudent(${i})">
       View
     </button>
   </div>
@@ -210,6 +214,10 @@ console.error(err);
 }
 
 // ================= VIEW =================
-function viewStudent(msgs) {
-alert(msgs.map(m => m.content).join("\n"));
+function viewStudent(i) {
+const msgs = studentsData[i].messages;
+
+alert(
+msgs.map(m => `${m.role}: ${m.content}`).join("\n")
+);
 }
