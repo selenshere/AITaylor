@@ -1,43 +1,142 @@
 <!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Taylor System</title>
-  <link rel="stylesheet" href="style.css">
-</head>
 
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Taylor Task Chatbot</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
 <body>
 
-<div id="entry" class="card">
-  <h2>Enter</h2>
-  <button onclick="chooseRole('educator')">Educator</button>
-  <button onclick="chooseRole('student')">Student</button>
+<!-- ROLE -->
+
+<div id="roleScreen" class="page">
+  <section class="card">
+    <h2>Enter</h2>
+    <button onclick="enterRole('educator')">Educator</button>
+    <button onclick="enterRole('student')">Student</button>
+  </section>
 </div>
 
-<div id="auth" class="card"></div>
+<!-- EDUCATOR -->
 
-<div id="app" style="display:none">
+<div id="educatorScreen" class="page hidden">
+  <section class="card">
+    <h2>Educator Dashboard</h2>
+    <input id="classInput" placeholder="Class code" />
+    <button onclick="loadClass()">Load Class</button>
+    <div id="studentsList"></div>
+  </section>
+</div>
 
-  <div id="info"></div>
+<!-- STUDENT -->
 
-  <!-- DASHBOARD -->
-  <div id="dashboard" class="card" style="display:none">
-    <h3>Students</h3>
-    <div id="studentList"></div>
+<div id="studentScreen" class="hidden">
+
+<header class="topbar">
+  <div class="brand">Taylor Task</div>
+  <div class="right">
+    <button id="submitBtn" class="primaryBtn">Finish & Submit</button>
+  </div>
+</header>
+
+<!-- PAGE 1 -->
+
+<main id="pageWelcome" class="page">
+  <section class="card">
+    <h1>Welcome to the Taylor task</h1>
+    <p>
+      In this activity, you will interact with Taylor, a simulated student who has solved the fraction problem.
+    </p>
+  </section>
+
+  <div class="welcomeGrid">
+
+```
+<section class="card taskCard">
+  <h2>Task</h2>
+  <div class="taskImageWrapper">
+    <img src="images/task.png" />
+  </div>
+</section>
+
+<section class="card">
+
+  <input id="studentName" placeholder="Your name" />
+  <input id="classCode" placeholder="Class code" />
+
+  <label class="q">
+    <span>1) What would you most like to understand?</span>
+    <textarea id="q1"></textarea>
+  </label>
+
+  <label class="q">
+    <span>2) First message to Taylor</span>
+    <textarea id="q3"></textarea>
+  </label>
+
+  <button id="startBtn" class="btn primary">Start Chat</button>
+
+</section>
+```
+
+  </div>
+</main>
+
+<!-- PAGE 2 -->
+
+<main id="pageChat" class="page hidden">
+  <div class="layout">
+
+```
+<section class="card taskCard taskPane">
+  <img src="images/task.png" />
+</section>
+
+<section class="card chat">
+  <div class="chatHeader">
+    <h2>Chat with Taylor</h2>
   </div>
 
-  <!-- CHAT -->
-  <div id="chatSection" class="card">
-    <div id="chatLog"></div>
+  <div id="chatLog" class="chatLog"></div>
 
+  <div class="composer">
     <textarea id="userInput"></textarea>
-    <button onclick="sendMessage()">Send</button>
-
-    <button onclick="submitChat()">Finish & Submit</button>
+    <button id="sendBtn" class="btn primary">Send</button>
   </div>
+</section>
+```
+
+  </div>
+</main>
+
+<!-- ANALYSIS -->
+
+<div id="analysisOverlay" class="overlay hidden">
+  <div class="overlayCard">
+
+```
+<h2>Analysis</h2>
+
+<div id="selectedText"></div>
+
+<textarea id="reasoning"></textarea>
+<textarea id="nextIntent"></textarea>
+
+<button id="saveReturnBtn" class="btn primary">
+  Continue
+</button>
+```
+
+  </div>
+</div>
 
 </div>
 
-<script src="app.js?v=2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script src="app.js"></script>
+
 </body>
 </html>
