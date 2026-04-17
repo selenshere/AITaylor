@@ -102,13 +102,40 @@ Keep answers short and student-like.
 app.post("/api/submit", async (req, res) => {
   const { student_name, class_id, messages } = req.body;
 
-  await supabase.from("progress").insert({
+  await supabase.from("progress").upsert({
     student_name,
     class_id,
     messages,
+    status: "submitted",
+    updated_at: new Date()
   });
 
   res.json({ ok: true });
+});
+
+// AUTOSAVE
+app.post("/api/progress/save", async (req, res) => {
+  const { student_name, class_id, messages } = req.body;
+
+  await supabase.from("progress").upsert({
+    student_name,
+    class_id,
+    messages,
+    status: "working",
+    updated_at: new Date()
+  });
+
+  res.json({ ok: true });
+});
+
+// DASHBOARD DATA
+app.get("/api/progress/:classId", async (req, res) => {
+  const { data } = await supabase
+    .from("progress")
+    .select("*")
+    .eq("class_id", req.params.classId);
+
+  res.json(data);
 });
 
 app.listen(3000, () => console.log("Server running"));
