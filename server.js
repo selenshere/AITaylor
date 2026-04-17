@@ -47,11 +47,11 @@ app.post("/api/class/login", async (req, res) => {
   res.json(data);
 });
 
-// 👨‍🎓 JOIN
+// JOIN
 app.post("/api/student/join", async (req, res) => {
   const { name, class_id } = req.body;
 
-  await supabase.from("students").insert({
+  await supabase.from("students").upsert({
     name,
     class_id,
   });
@@ -59,7 +59,7 @@ app.post("/api/student/join", async (req, res) => {
   res.json({ ok: true });
 });
 
-// 📊 STUDENTS
+// STUDENTS
 app.get("/api/students/:classId", async (req, res) => {
   const { data } = await supabase
     .from("students")
@@ -98,7 +98,7 @@ Keep answers short and student-like.
   res.json(data);
 });
 
-// 📤 SUBMIT
+// SUBMIT
 app.post("/api/submit", async (req, res) => {
   const { student_name, class_id, messages } = req.body;
 
@@ -107,7 +107,6 @@ app.post("/api/submit", async (req, res) => {
     class_id,
     messages,
     status: "submitted",
-    updated_at: new Date()
   });
 
   res.json({ ok: true });
