@@ -1,10 +1,8 @@
-// 🔗 BACKEND URL
 const API_URL = "https://aitaylor.onrender.com";
 
-// 💾 GLOBAL STATE
 let messages = [];
 
-// 👤 USER (role sorar)
+// 👤 USER
 function getUser() {
   let user = localStorage.getItem("user");
 
@@ -28,7 +26,7 @@ function getUser() {
   return user;
 }
 
-// 🏫 CLASS (teacher oluşturur, student girer)
+// 🏫 CLASS
 function getClassId(user) {
   let classId = localStorage.getItem("class_id");
 
@@ -37,7 +35,7 @@ function getClassId(user) {
       classId = "class-" + Math.floor(Math.random() * 10000);
       alert("Your class code:\n" + classId);
     } else {
-      classId = prompt("Enter class code from your teacher:");
+      classId = prompt("Enter class code:");
     }
 
     localStorage.setItem("class_id", classId);
@@ -46,12 +44,28 @@ function getClassId(user) {
   return classId;
 }
 
+// 🎯 CLASS CODE HEADER GÖSTER
+function showClassInfo(user, classId) {
+  const header = document.querySelector(".topbar");
+
+  const div = document.createElement("div");
+  div.style.marginLeft = "20px";
+  div.style.fontSize = "14px";
+
+  div.innerHTML = `
+    <b>Role:</b> ${user.role} | 
+    <b>Class:</b> ${classId}
+  `;
+
+  header.appendChild(div);
+}
+
 // 🚀 START CHAT
 document.getElementById("startBtn").addEventListener("click", () => {
   const firstMsg = document.getElementById("q3").value;
 
   if (!firstMsg) {
-    document.getElementById("formError").innerText = "Please write first message";
+    document.getElementById("formError").innerText = "Write first message";
     return;
   }
 
@@ -62,7 +76,7 @@ document.getElementById("startBtn").addEventListener("click", () => {
   renderChat();
 });
 
-// 📩 SEND MESSAGE
+// 📩 SEND
 document.getElementById("sendBtn").addEventListener("click", sendMessage);
 
 async function sendMessage() {
@@ -80,17 +94,14 @@ async function sendMessage() {
   try {
     const res = await fetch(`${API_URL}/api/chat`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ messages }),
     });
 
     const data = await res.json();
 
     if (!data.choices) {
-      console.error("API ERROR:", data);
-      alert("API error. Check console.");
+      alert("API error");
       return;
     }
 
@@ -105,11 +116,10 @@ async function sendMessage() {
 
   } catch (err) {
     console.error(err);
-    document.getElementById("apiStatus").innerText = "error";
   }
 }
 
-// 🖥️ CHAT RENDER
+// 🖥️ CHAT
 function renderChat() {
   const chatLog = document.getElementById("chatLog");
 
@@ -120,82 +130,81 @@ function renderChat() {
   chatLog.scrollTop = chatLog.scrollHeight;
 }
 
-// 🧠 ANALYSIS POPUP
+// 🧠 ANALYSIS
 function openAnalysis(text) {
-  const overlay = document.getElementById("analysisOverlay");
-
   document.getElementById("selectedText").innerText = text;
-
-  overlay.classList.remove("hidden");
+  document.getElementById("analysisOverlay").classList.remove("hidden");
 }
 
-// 🔙 ANALYSIS SAVE
 document.getElementById("saveReturnBtn").addEventListener("click", () => {
-  const reasoning = document.getElementById("reasoning").value;
-  const nextIntent = document.getElementById("nextIntent").value;
-
-  if (!reasoning || !nextIntent) {
-    alert("Please fill required fields");
-    return;
-  }
-
   document.getElementById("analysisOverlay").classList.add("hidden");
-
-  document.getElementById("reasoning").value = "";
-  document.getElementById("nextIntent").value = "";
 });
 
-// 📤 SUBMIT (student gönderir)
+// 📤 SUBMIT
 async function submitChat() {
   const user = getUser();
   const classId = getClassId(user);
 
-  try {
-    await fetch(`${API_URL}/api/save`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user_id: user.id,
-        role: user.role,
-        class_id: classId,
-        messages
-      }),
-    });
+  await fetch(`${API_URL}/api/save`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      user_id: user.id,
+      role: user.role,
+      class_id: classId,
+      messages
+    }),
+  });
 
-    alert("✅ Submitted successfully!");
-
-  } catch (err) {
-    console.error(err);
-    alert("❌ Submit failed");
-  }
+  alert("Submitted!");
 }
 
-// 👨‍🏫 EDUCATOR PANEL (console’da görür)
-async function loadClassData() {
-  const user = getUser();
-
-  if (user.role !== "educator") return;
-
-  const classId = getClassId(user);
-
+// 👨‍🏫 DASHBOARD UI
+async function loadClassData(classId) {
   const res = await fetch(`${API_URL}/api/class/${classId}`);
   const data = await res.json();
 
-  console.log("📊 STUDENT DATA:", data);
-  alert("Educator view loaded → check console");
+  let panel = document.getElementById("teacherPanel");
+
+  if (!panel) {
+    panel = document.createElement("div");
+    panel.id = "teacherPanel";
+    panel.style.padding = "10px";
+    panel.style.background = "#f3f3f3";
+    panel.style.margin = "10px";
+    document.body.prepend(panel);
+  }
+
+  panel.innerHTML = `
+    <h3>📊 Student Submissions (${data.length})</h3>
+    ${data.map(d => `
+      <div style="border:1px solid #ccc; padding:8px; margin:5px;">
+        <b>User:</b> ${d.user_id}<br/>
+        <b>Messages:</b> ${d.messages.length}
+      </div>
+    `).join("")}
+  `;
+}
+
+// 🔁 AUTO REFRESH (teacher için)
+function startTeacherAutoRefresh(classId) {
+  setInterval(() => {
+    loadClassData(classId);
+  }, 5000);
 }
 
 // 🌍 INIT
 window.onload = () => {
   const user = getUser();
-  getClassId(user);
+  const classId = getClassId(user);
+
+  showClassInfo(user, classId);
 
   if (user.role === "educator") {
-    loadClassData();
+    loadClassData(classId);
+    startTeacherAutoRefresh(classId);
   }
 };
 
-// 🌍 GLOBAL expose
+// 🌍 GLOBAL
 window.submitChat = submitChat;
