@@ -75,11 +75,32 @@ async function loadSubmissions() {
   const res = await fetch(API + "/api/submissions/" + classId);
   const data = await res.json();
 
-  document.getElementById("submissions").innerHTML =
-    data.map(d => `
+  // stats
+  const total = data.length;
+  const uniqueStudents = [...new Set(data.map(d => d.user_name))];
+
+  document.getElementById("submissions").innerHTML = `
+    <h3>Class Stats</h3>
+    <p>Total submissions: ${total}</p>
+    <p>Students submitted: ${uniqueStudents.length}</p>
+
+    <h3>Submissions</h3>
+    ${data.map(d => `
       <div style="border:1px solid #ccc; margin:10px; padding:10px;">
         <b>${d.user_name}</b>
-        <pre>${JSON.stringify(d.messages, null, 2)}</pre>
+        <button onclick='toggleChat("${d.id}")'>View</button>
+
+        <div id="chat-${d.id}" style="display:none">
+          ${d.messages.map(m => `
+            <p><b>${m.role}:</b> ${m.content}</p>
+          `).join("")}
+        </div>
       </div>
-    `).join("");
+    `).join("")}
+  `;
+}
+
+function toggleChat(id) {
+  const el = document.getElementById("chat-" + id);
+  el.style.display = el.style.display === "none" ? "block" : "none";
 }
