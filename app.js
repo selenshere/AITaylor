@@ -55,9 +55,24 @@ async function createClass() {
 
     alert("Class: " + classId);
 
-    startApp();
-  } catch (e) {
-    alert("Error creating class");
+    function startApp() {
+  document.getElementById("auth").style.display = "none";
+  document.getElementById("app").style.display = "block";
+
+  document.getElementById("info").innerText =
+    `${user.name} | ${user.role} | ${classId}`;
+
+  if (user.role === "educator") {
+    loadStudents();
+    document.getElementById("dashboard").style.display = "block";
+    document.getElementById("pageWelcome").style.display = "none";
+    document.getElementById("pageChat").classList.add("hidden");
+  }
+
+  if (user.role === "student") {
+    document.getElementById("pageWelcome").style.display = "block";
+    document.getElementById("pageChat").classList.add("hidden");
+    document.getElementById("dashboard").style.display = "none";
   }
 }
 
