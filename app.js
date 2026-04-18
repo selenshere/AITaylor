@@ -615,6 +615,19 @@ async function finishAndSubmit() {
     })),
   };
 
+  async function redirectByRole() {
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .single();
+
+  if (profile.role === 'instructor') {
+    window.location.href = "/instructor.html";
+  } else {
+    window.location.href = "/";
+  }
+}
+
   const resp = await fetch("https://aitaylor.onrender.com/api/submit", {
     method: "POST",
     headers: {
