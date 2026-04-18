@@ -92,3 +92,9 @@ input,textarea{
   right:10px;
   cursor:pointer;
 }
+
+.layout{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
