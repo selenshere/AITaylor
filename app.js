@@ -604,23 +604,20 @@ downloadBtn.addEventListener("click", () => {
 });
 
 async function finishAndSubmit() {
-  // chat pause olduğunda API'ye hiçbir şey gitmesin
   if (chatPaused) return;
-  if (submitting) return;
-  submitting = true;
-  if (submitBtn) submitBtn.disabled = true;
 
-  const files = buildExportFiles();
+  await supabase.from("submissions").insert([{
+    session_id: getSessionId(),
+    first_name: state.name.firstName,
+    last_name: state.name.lastName,
+    data: {
+      messages: state.messages,
+      annotations: state.annotations
+    }
+  }]);
 
-  const toB64 = (txt) => btoa(unescape(encodeURIComponent(txt)));
-
-  const payload = {
-    files: files.map(f => ({
-      name: f.name,
-      mimeType: f.mimeType,
-      base64: toB64(f.content),
-    })),
-  };
+  showSubmitThanks();
+}
 
   async function redirectByRole() {
   const { data: profile } = await supabase
