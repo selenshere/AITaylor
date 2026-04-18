@@ -8,12 +8,6 @@ const supabase = createClient("https://xrxbjcfmljimozznnvmy.supabase.co", "eyJhb
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-async function login() {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: email.value,
-    password: password.value
-  });
-
   if (error) return alert(error.message);
 
   redirectByRole();
