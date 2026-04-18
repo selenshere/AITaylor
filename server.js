@@ -5,6 +5,8 @@ import cors from "cors";
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient("https://xrxbjcfmljimozznnvmy.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyeGJqY2ZtbGppbW96em5udm15Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NjQzMzYyOCwiZXhwIjoyMDkyMDA5NjI4fQ.XrrUHsnu_rpO87MLvWBj_IljhPSZriEpMITTW89lw1g");
+const app = express();
+const PORT = process.env.PORT || 3000;
 
 async function login() {
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -20,9 +22,6 @@ async function login() {
 app.use(cors({
   origin: "*"
 }));
-
-const app = express();
-const PORT = process.env.PORT || 3000;
 
 // ---- Middleware ----
 app.use(express.json({ limit: "1mb" }));
