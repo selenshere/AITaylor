@@ -628,14 +628,15 @@ async function finishAndSubmit() {
   }
 }
 
-  const resp = await fetch("https://aitaylor.onrender.com/api/submit", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-session-id": getSessionId()
-    },
-    body: JSON.stringify(payload),
-  });
+  await supabase.from("submissions").insert([{
+  session_id: getSessionId(),
+  first_name: state.name.firstName,
+  last_name: state.name.lastName,
+  data: {
+    messages: state.messages,
+    annotations: state.annotations
+  }
+}]);
 
   if (!resp.ok) {
     const t = await resp.text();
