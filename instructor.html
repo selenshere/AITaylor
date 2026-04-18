@@ -1,20 +1,20 @@
-<!doctype html>
-<html>
-<head><title>Educator</title></head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Instructor Panel</title>
+</head>
 <body>
 
-<h2>Create Class</h2>
-<input id="code"/>
-<input id="pass"/>
-<button onclick="create()">Create</button>
+<h1>Instructor Dashboard</h1>
 
-<h2>Login</h2>
-<input id="code2"/>
-<input id="pass2"/>
-<button onclick="login()">Login</button>
+<button onclick="loadData()">Load Submissions</button>
+<button onclick="exportCSV()">Export CSV</button>
 
-<div id="dashboard"></div>
+<table border="1" id="table"></table>
 
-<script src="educator.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="instructor.js"></script>
+
 </body>
 </html>
