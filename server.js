@@ -51,7 +51,20 @@ app.post("/api/student/join", async (req, res) => {
 
   if (!data) return res.status(400).json({ error: "no class" });
 
-  await supabase.from("students").insert({ name, class_id });
+  app.post("/api/progress/upsert", async (req, res) => {
+  const { student_name, class_id, messages, status } = req.body;
+
+  await supabase.from("progress").upsert(
+    {
+      student_name,
+      class_id,
+      messages,
+      status,
+      updated_at: new Date()
+    },
+    { onConflict: "student_name,class_id" }
+  );
+
   res.json({ ok: true });
 });
 
