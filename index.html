@@ -19,6 +19,19 @@
 
 <div id="auth" class="card" style="display:none"></div>
 
+<!-- POPUP MODAL -->
+<div id="modal" class="modal hidden">
+  <div class="modalContent">
+    <h3>Class Created ✅</h3>
+    <p id="classCodeText"></p>
+    <input id="copyLink" readonly>
+    <div class="row">
+      <button onclick="copyLink()">Copy Link</button>
+      <button onclick="goDashboard()">Go to Dashboard</button>
+    </div>
+  </div>
+</div>
+
 <div id="app" style="display:none">
 
 <header class="topbar">
@@ -38,7 +51,6 @@
     <input id="lastName" placeholder="Last name">
     <textarea id="q3" placeholder="First message"></textarea>
     <button id="startBtn">Start Chat</button>
-    <div id="formError"></div>
   </div>
 </main>
 
