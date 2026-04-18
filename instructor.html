@@ -1,20 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Instructor Panel</title>
+
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+  <header class="topbar">
+    <div class="brand">Instructor Panel</div>
+    <div class="right">
+      <button onclick="loadData()" class="btn secondary">Refresh</button>
+      <button onclick="exportCSV()" class="primaryBtn">Export CSV</button>
+    </div>
+  </header>
 
-<h1>Instructor Dashboard</h1>
+  <main class="page">
+    <section class="card">
+      <h2>All Submissions</h2>
+      <div id="list"></div>
+    </section>
+  </main>
 
-<button onclick="loadData()">Load Submissions</button>
-<button onclick="exportCSV()">Export CSV</button>
-
-<table border="1" id="table"></table>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-<script src="instructor.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="instructor.js"></script>
 </body>
 </html>
