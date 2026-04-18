@@ -1,4 +1,4 @@
-const API="http://localhost:3000";
+const API="https://aitaylor.onrender.com";
 
 let classId=null;
 let messages=[];
