@@ -1,24 +1,54 @@
-const API="https://aitaylor.onrender.com";
-let classId="";
+const supabase = supabase.createClient(
+  "SUPABASE_URL",
+  "SUPABASE_ANON_KEY"
+);
 
-async function create(){
- const code=document.getElementById("code").value;
- const pass=document.getElementById("pass").value;
- await fetch(API+"/api/class/create",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code,password:pass})});
- alert("link: "+location.origin+"?class="+code);
+async function loadData() {
+  const { data } = await supabase
+    .from("submissions")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  const table = document.getElementById("table");
+
+  table.innerHTML = `
+    <tr>
+      <th>Name</th>
+      <th>Date</th>
+      <th>Session</th>
+    </tr>
+  `;
+
+  data.forEach(d => {
+    table.innerHTML += `
+      <tr>
+        <td>${d.first_name} ${d.last_name}</td>
+        <td>${new Date(d.created_at).toLocaleString()}</td>
+        <td>${d.session_id}</td>
+      </tr>
+    `;
+  });
 }
 
-async function login(){
- const code=document.getElementById("code2").value;
- const pass=document.getElementById("pass2").value;
- await fetch(API+"/api/class/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code,password:pass})});
- classId=code;
- load();
-}
+async function exportCSV() {
+  const { data } = await supabase.from("submissions").select("*");
 
-async function load(){
- const res=await fetch(API+"/api/class/"+classId);
- const data=await res.json();
- document.getElementById("dashboard").innerHTML=data.map(d=>`<div>${d.student_name} - ${d.status}</div>`).join("");
- setTimeout(load,3000);
+  const rows = data.map(d => ({
+    name: d.first_name + " " + d.last_name,
+    date: d.created_at,
+    session: d.session_id
+  }));
+
+  const csv = [
+    Object.keys(rows[0]).join(","),
+    ...rows.map(r => Object.values(r).join(","))
+  ].join("\n");
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "submissions.csv";
+  a.click();
 }
