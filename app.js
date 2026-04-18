@@ -615,14 +615,14 @@ async function finishAndSubmit() {
   if (chatPaused) return;
 
   await supabase.from("submissions").insert([{
-    session_id: getSessionId(),
-    first_name: state.name.firstName,
-    last_name: state.name.lastName,
-    data: {
-      messages: state.messages,
-      annotations: state.annotations
-    }
-  }]);
+  user_id: getSessionId(),
+  class_id: "default",
+  assignment_id: crypto.randomUUID(),
+  messages: {
+    messages: state.messages,
+    annotations: state.annotations
+  }
+}]);
 
   showSubmitThanks();
 }
