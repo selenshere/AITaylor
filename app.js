@@ -645,15 +645,6 @@ async function finishAndSubmit() {
   }
 }]);
 
-  if (!resp.ok) {
-    const t = await resp.text();
-    throw new Error("Submit failed: " + t);
-  }
-
-  // teşekkür popup
-  showSubmitThanks();
-}
-
 submitBtn?.addEventListener("click", () => {
   finishAndSubmit().catch(err => {
     // hata olursa tekrar denemeye izin ver
