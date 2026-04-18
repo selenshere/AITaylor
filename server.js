@@ -51,7 +51,24 @@ app.post("/api/student/join", async (req, res) => {
 
   if (!data) return res.status(400).json({ error: "no class" });
 
-  app.post("/api/progress/upsert", async (req, res) => {
+  // duplicate engelle
+  await supabase.from("students").upsert(
+    { name, class_id },
+    { onConflict: "name,class_id" }
+  );
+
+  // progress varsa getir
+  const { data: progress } = await supabase
+    .from("progress")
+    .select("*")
+    .eq("student_name", name)
+    .eq("class_id", class_id)
+    .maybeSingle();
+
+  res.json({ ok: true, progress });
+});
+
+app.post("/api/progress/upsert", async (req, res) => {
   const { student_name, class_id, messages, status } = req.body;
 
   await supabase.from("progress").upsert(
@@ -101,7 +118,18 @@ app.post("/api/chat", async (req, res) => {
 // SUBMIT
 app.post("/api/submit", async (req, res) => {
   const { student_name, class_id, messages } = req.body;
-  await supabase.from("progress").insert({ student_name, class_id, messages });
+
+  await supabase.from("progress").upsert(
+    {
+      student_name,
+      class_id,
+      messages,
+      status: "done",
+      updated_at: new Date()
+    },
+    { onConflict: "student_name,class_id" }
+  );
+
   res.json({ ok: true });
 });
 
