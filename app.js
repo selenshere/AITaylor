@@ -1,126 +1,120 @@
-const API="https://aitaylor.onrender.com";
+const API="http://localhost:3000";
 
 let classId=null;
 let messages=[];
+let progressData=[];
 
 function chooseRole(r){
-document.getElementById("entry").style.display="none";
+document.getElementById("entry").classList.add("hidden");
 const box=document.getElementById("auth");
-box.style.display="block";
+box.classList.remove("hidden");
 
 if(r==="educator"){
 box.innerHTML=`
-<input id="classCodeInput" placeholder="Class Code (e.g. math101)">
-<input id="tpass" placeholder="Password">
-<button onclick="createClass()">Create Class</button>
+<input id="code" placeholder="Class Code">
+<input id="pass" placeholder="Password">
+<button onclick="createClass()">Create</button>
 `;
 }
 
 if(r==="student"){
 box.innerHTML=`
-<input id="sname" placeholder="Name">
-<input id="scode" placeholder="Class code or link">
-<button onclick="joinClass()">Join</button>
-<div id="errorMsg" style="color:red"></div>
+<input id="name" placeholder="Name">
+<input id="codeJoin" placeholder="Code or link">
+<button onclick="join()">Join</button>
+<div id="err" style="color:red"></div>
 `;
 }
 }
 
 async function createClass(){
-const classCode=document.getElementById("classCodeInput").value;
-const password=document.getElementById("tpass").value;
+const code=document.getElementById("code").value;
+const password=document.getElementById("pass").value;
 
 const res=await fetch(API+"/api/class/create",{
 method:"POST",
 headers:{"Content-Type":"application/json"},
-body:JSON.stringify({teacher_name:"t",password,classId:classCode})
+body:JSON.stringify({teacher_name:"t",password,classId:code})
 });
 
-if(!res.ok){
-alert("Class already exists!");
-return;
-}
+if(!res.ok){alert("exists");return;}
 
-classId=classCode;
-const link=window.location.origin+"?class="+classId;
+classId=code;
+const link=location.origin+"?class="+code;
 
-document.getElementById("classCodeText").innerText="Code: "+classId;
+document.getElementById("classCodeText").innerText="Code: "+code;
 document.getElementById("copyLink").value=link;
 document.getElementById("modal").classList.remove("hidden");
 }
 
+function closeModal(){
+document.getElementById("modal").classList.add("hidden");
+}
+
 function copyLink(){
-const input=document.getElementById("copyLink");
-navigator.clipboard.writeText(input.value);
-alert("Copied!");
+navigator.clipboard.writeText(document.getElementById("copyLink").value);
 }
 
 function goDashboard(){
-document.getElementById("modal").classList.add("hidden");
-startEducator();
+closeModal();
+document.getElementById("auth").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
+
+document.getElementById("submitBtn").style.display="none";
+document.getElementById("dashboard").classList.remove("hidden");
+
+loadProgress();
+setInterval(loadProgress,3000);
 }
 
-async function joinClass(){
-const name=document.getElementById("sname").value;
-let input=document.getElementById("scode").value;
-
-if(input.includes("?class=")){
-input=input.split("?class=")[1];
-}
+async function join(){
+let code=document.getElementById("codeJoin").value;
+if(code.includes("?class=")){code=code.split("?class=")[1];}
 
 const res=await fetch(API+"/api/student/join",{
 method:"POST",
 headers:{"Content-Type":"application/json"},
-body:JSON.stringify({name,class_id:input})
+body:JSON.stringify({name:"student",class_id:code})
 });
 
 if(!res.ok){
-document.getElementById("errorMsg").innerText="Wrong class code";
+document.getElementById("err").innerText="Wrong code";
 return;
 }
 
-classId=input;
-startStudent();
-}
+classId=code;
+document.getElementById("auth").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
 
-function startEducator(){
-document.getElementById("auth").style.display="none";
-document.getElementById("app").style.display="block";
-document.getElementById("dashboard").classList.remove("hidden");
-}
-
-function startStudent(){
-document.getElementById("auth").style.display="none";
-document.getElementById("app").style.display="block";
+document.getElementById("submitBtn").style.display="block";
 document.getElementById("pageWelcome").classList.remove("hidden");
 }
 
-function renderChat(){
-const log=document.getElementById("chatLog");
-log.innerHTML=messages.map(m=>{
-const c=m.role==="user"?"user":"taylor";
-return `<div class="bubble ${c}">${m.content}</div>`;
-}).join("");
+async function loadProgress(){
+const res=await fetch(API+"/api/progress/"+classId);
+const data=await res.json();
+progressData=data;
+
+document.getElementById("studentList").innerHTML=
+data.map(p=>`<div>${p.student_name}</div>`).join("");
 }
 
-async function sendMessage(){
+function render(){
+const log=document.getElementById("chatLog");
+log.innerHTML=messages.map(m=>`<div class="bubble ${m.role==='user'?'user':'taylor'}">${m.content}</div>`).join("");
+}
+
+async function send(){
 const input=document.getElementById("userInput");
-const text=input.value;
-if(!text)return;
-
-messages.push({role:"user",content:text});
+messages.push({role:"user",content:input.value});
 input.value="";
-renderChat();
+render();
 
-const res=await fetch(API+"/api/chat",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({messages})
-});
-
+const res=await fetch(API+"/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages})});
 const data=await res.json();
+
 messages.push({role:"assistant",content:data.choices[0].message.content});
-renderChat();
+render();
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
@@ -128,6 +122,15 @@ document.getElementById("startBtn")?.addEventListener("click",()=>{
 document.getElementById("pageWelcome").classList.add("hidden");
 document.getElementById("pageChat").classList.remove("hidden");
 });
+document.getElementById("sendBtn")?.addEventListener("click",send);
 
-document.getElementById("sendBtn")?.addEventListener("click",sendMessage);
+// modal close on outside click
+document.getElementById("modal").addEventListener("click",(e)=>{
+if(e.target.id==="modal"){closeModal();}
+});
+
+// ESC close
+document.addEventListener("keydown",(e)=>{
+if(e.key==="Escape"){closeModal();}
+});
 });

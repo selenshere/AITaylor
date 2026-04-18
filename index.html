@@ -17,11 +17,11 @@
   </div>
 </div>
 
-<div id="auth" class="card" style="display:none"></div>
+<div id="auth" class="card hidden"></div>
 
-<!-- POPUP MODAL -->
 <div id="modal" class="modal hidden">
   <div class="modalContent">
+    <span class="close" onclick="closeModal()">✖</span>
     <h3>Class Created ✅</h3>
     <p id="classCodeText"></p>
     <input id="copyLink" readonly>
@@ -32,8 +32,7 @@
   </div>
 </div>
 
-<div id="app" style="display:none">
-
+<div id="app" class="hidden">
 <header class="topbar">
   <div class="brand">Taylor Task</div>
   <button id="submitBtn">Finish & Submit</button>
@@ -46,9 +45,7 @@
 
 <main id="pageWelcome" class="page hidden">
   <div class="card">
-    <h2>Welcome</h2>
     <input id="firstName" placeholder="First name">
-    <input id="lastName" placeholder="Last name">
     <textarea id="q3" placeholder="First message"></textarea>
     <button id="startBtn">Start Chat</button>
   </div>
@@ -56,9 +53,6 @@
 
 <main id="pageChat" class="page hidden">
   <div class="layout">
-    <div class="card">
-      <img src="images/task.png" style="width:100%">
-    </div>
     <div class="card chat">
       <div id="chatLog"></div>
       <textarea id="userInput"></textarea>
@@ -66,7 +60,6 @@
     </div>
   </div>
 </main>
-
 </div>
 
 <script src="app.js"></script>
