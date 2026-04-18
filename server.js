@@ -4,7 +4,7 @@ import stream from "stream";
 import cors from "cors";
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient("https://xrxbjcfmljimozznnvmy.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyeGJqY2ZtbGppbW96em5udm15Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NjQzMzYyOCwiZXhwIjoyMDkyMDA5NjI4fQ.XrrUHsnu_rpO87MLvWBj_IljhPSZriEpMITTW89lw1g");
+const supabase = createClient("https://xrxbjcfmljimozznnvmy.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyeGJqY2ZtbGppbW96em5udm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0MzM2MjgsImV4cCI6MjA5MjAwOTYyOH0.Y9QvsAkD1FeAvRJrQTNdy59ridkXYQO1nfPul1LF34o");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
