@@ -9,12 +9,19 @@ function closeModal(){
 
 function chooseRole(r){
 
-  // 🔥 HER ZAMAN modal reset
   closeModal();
 
   document.getElementById("entry").classList.add("hidden");
   const box=document.getElementById("auth");
   box.classList.remove("hidden");
+
+  if(r==="educator"){
+    box.innerHTML=`
+      <input id="code" placeholder="Class Code">
+      <input id="pass" placeholder="Password">
+      <button onclick="createClass()">Create</button>
+    `;
+  }
 
   if(r==="educator"){
     box.innerHTML=`
