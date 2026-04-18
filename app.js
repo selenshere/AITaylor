@@ -194,7 +194,6 @@ async function send(){
   await saveProgress("working");
 }
 
-// 🔥 YENİ
 async function saveProgress(status){
   localStorage.setItem("messages", JSON.stringify(messages));
 
@@ -202,8 +201,8 @@ async function saveProgress(status){
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({
-      student_name: studentName,
-      class_id: classId,
+      student_name: firstName + " " + lastName,
+      class_id: classId || "demo",
       messages,
       status
     })
@@ -214,14 +213,28 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   closeModal();
 
-  document.getElementById("startBtn")?.addEventListener("click",()=>{
-    document.getElementById("pageWelcome").classList.add("hidden");
-    document.getElementById("pageChat").classList.remove("hidden");
-  });
+let firstName = "";
+let lastName = "";
+
+document.getElementById("startBtn")?.addEventListener("click", async ()=>{
+  firstName = document.getElementById("firstName").value;
+  lastName = document.getElementById("lastName").value;
+
+  document.getElementById("pageWelcome").classList.add("hidden");
+  document.getElementById("pageChat").classList.remove("hidden");
+
+  const firstMsg = document.getElementById("q3").value;
+
+  if(firstMsg){
+    messages.push({role:"user",content:firstMsg});
+    render();
+    await send();
+  }
+});
 
   document.getElementById("sendBtn")?.addEventListener("click",send);
 
-  // 🔥 SUBMIT FIX
+  // SUBMIT
   document.getElementById("submitBtn")?.addEventListener("click", async ()=>{
     await saveProgress("done");
     alert("Submitted!");
