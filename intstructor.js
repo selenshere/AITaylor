@@ -1,37 +1,55 @@
-const supabase = supabase.createClient(
+const supabaseClient = window.supabase.createClient(
   "https://xrxbjcfmljimozznnvmy.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyeGJqY2ZtbGppbW96em5udm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0MzM2MjgsImV4cCI6MjA5MjAwOTYyOH0.Y9QvsAkD1FeAvRJrQTNdy59ridkXYQO1nfPul1LF34o"
-  );
+);
 
 async function loadData() {
-  const { data } = await supabase
+  const { data, error } = await supabaseClient
     .from("submissions")
     .select("*")
     .order("created_at", { ascending: false });
 
-  const table = document.getElementById("table");
+  if (error) {
+    alert(error.message);
+    return;
+  }
 
-  table.innerHTML = `
-    <tr>
-      <th>Name</th>
-      <th>Date</th>
-      <th>Session</th>
-    </tr>
-  `;
+  const list = document.getElementById("list");
+  list.innerHTML = "";
 
-  data.forEach(d => {
-    table.innerHTML += `
-      <tr>
-        <td>${d.first_name} ${d.last_name}</td>
-        <td>${new Date(d.created_at).toLocaleString()}</td>
-        <td>${d.session_id}</td>
-      </tr>
+  data.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML = `
+      <b>${item.first_name} ${item.last_name}</b><br>
+      <small>${new Date(item.created_at).toLocaleString()}</small><br><br>
+
+      <button class="btn primary" onclick='downloadOne(${JSON.stringify(item)})'>
+        Download JSON
+      </button>
     `;
+
+    list.appendChild(div);
   });
 }
 
+function downloadOne(item) {
+  const content = JSON.stringify(item, null, 2);
+
+  const blob = new Blob([content], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${item.first_name}_${item.last_name}.json`;
+  a.click();
+}
+
 async function exportCSV() {
-  const { data } = await supabase.from("submissions").select("*");
+  const { data } = await supabaseClient
+    .from("submissions")
+    .select("*");
 
   const rows = data.map(d => ({
     name: d.first_name + " " + d.last_name,
@@ -52,3 +70,6 @@ async function exportCSV() {
   a.download = "submissions.csv";
   a.click();
 }
+
+// auto load
+loadData();
