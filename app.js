@@ -1,33 +1,34 @@
-const API="https://aitaylor.onrender.com";
+const API = "https://aitaylor.onrender.com";
 
-let classId=null;
-let messages=[];
+let classId = null;
+let messages = [];
 
 function closeModal(){
   document.getElementById("modal").classList.add("hidden");
 }
 
 function chooseRole(r){
-
   closeModal();
 
   document.getElementById("entry").classList.add("hidden");
-  const box=document.getElementById("auth");
+  const box = document.getElementById("auth");
   box.classList.remove("hidden");
 
   if(r==="educator"){
     box.innerHTML=`
-      <input id="code" placeholder="Class Code">
-      <input id="pass" placeholder="Password">
-      <button onclick="createClass()">Create</button>
-    `;
-  }
 
-  if(r==="educator"){
-    box.innerHTML=`
-      <input id="code" placeholder="Class Code">
-      <input id="pass" placeholder="Password">
-      <button onclick="createClass()">Create</button>
+    <h3>Create Class</h3>
+    <input id="code" placeholder="Class Code">
+    <input id="pass" placeholder="Password">
+    <button onclick="createClass()">Create</button>
+
+    <hr>
+
+    <h3>Login to Class</h3>
+    <input id="loginCode" placeholder="Class Code">
+    <input id="loginPass" placeholder="Password">
+    <button onclick="loginClass()">Login</button>
+
     `;
   }
 
@@ -42,10 +43,10 @@ function chooseRole(r){
 }
 
 async function createClass(){
-  const code=document.getElementById("code").value;
-  const password=document.getElementById("pass").value;
+  const code = document.getElementById("code").value;
+  const password = document.getElementById("pass").value;
 
-  const res=await fetch(API+"/api/class/create",{
+  const res = await fetch(API+"/api/class/create",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({teacher_name:"t",password,classId:code})
@@ -56,23 +57,42 @@ async function createClass(){
     return;
   }
 
-  classId=code;
-  const link=location.origin+"?class="+code;
+  classId = code;
+
+  const link = location.origin+"?class="+code;
 
   document.getElementById("classCodeText").innerText="Code: "+code;
   document.getElementById("copyLink").value=link;
 
-  // ✅ SADECE BURADA açılır
   document.getElementById("modal").classList.remove("hidden");
 }
 
-function copyLink(){
-  navigator.clipboard.writeText(document.getElementById("copyLink").value);
+async function loginClass(){
+  const code = document.getElementById("loginCode").value;
+  const password = document.getElementById("loginPass").value;
+
+  const res = await fetch(API+"/api/class/login",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ classId: code, password })
+  });
+
+  if(!res.ok){
+    alert("Wrong class code or password");
+    return;
+  }
+
+  classId = code;
+
+  startEducator();
 }
 
 function goDashboard(){
   closeModal();
+  startEducator();
+}
 
+function startEducator(){
   document.getElementById("auth").classList.add("hidden");
   document.getElementById("app").classList.remove("hidden");
 
@@ -155,7 +175,6 @@ async function send(){
 
 document.addEventListener("DOMContentLoaded",()=>{
 
-  // 🔥 garanti kapalı başlasın
   closeModal();
 
   document.getElementById("startBtn")?.addEventListener("click",()=>{
@@ -165,14 +184,12 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   document.getElementById("sendBtn")?.addEventListener("click",send);
 
-  // dış tıklama
   document.getElementById("modal").addEventListener("click",(e)=>{
     if(e.target.id==="modal"){
       closeModal();
     }
   });
 
-  // ESC
   document.addEventListener("keydown",(e)=>{
     if(e.key==="Escape"){
       closeModal();
