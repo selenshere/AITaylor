@@ -1,6 +1,6 @@
 const supabase = supabase.createClient(
-  "SUPABASE_URL",
-  "SUPABASE_ANON_KEY"
+  "https://xrxbjcfmljimozznnvmy.supabase.coL",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyeGJqY2ZtbGppbW96em5udm15Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NjQzMzYyOCwiZXhwIjoyMDkyMDA5NjI4fQ.XrrUHsnu_rpO87MLvWBj_IljhPSZriEpMITTW89lw1g"
 );
 
 async function loadData() {
