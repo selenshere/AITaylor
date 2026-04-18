@@ -4,7 +4,15 @@ let classId=null;
 let messages=[];
 let progressData=[];
 
+function closeModal(){
+document.getElementById("modal").classList.add("hidden");
+}
+
 function chooseRole(r){
+
+// 🔥 modal always reset
+document.getElementById("modal").classList.add("hidden");
+
 document.getElementById("entry").classList.add("hidden");
 const box=document.getElementById("auth");
 box.classList.remove("hidden");
@@ -44,11 +52,9 @@ const link=location.origin+"?class="+code;
 
 document.getElementById("classCodeText").innerText="Code: "+code;
 document.getElementById("copyLink").value=link;
-document.getElementById("modal").classList.remove("hidden");
-}
 
-function closeModal(){
-document.getElementById("modal").classList.add("hidden");
+// only open here
+document.getElementById("modal").classList.remove("hidden");
 }
 
 function copyLink(){
@@ -57,6 +63,7 @@ navigator.clipboard.writeText(document.getElementById("copyLink").value);
 
 function goDashboard(){
 closeModal();
+
 document.getElementById("auth").classList.add("hidden");
 document.getElementById("app").classList.remove("hidden");
 
@@ -83,6 +90,9 @@ return;
 }
 
 classId=code;
+
+closeModal();
+
 document.getElementById("auth").classList.add("hidden");
 document.getElementById("app").classList.remove("hidden");
 
@@ -118,18 +128,21 @@ render();
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
+// always start hidden
+closeModal();
+
 document.getElementById("startBtn")?.addEventListener("click",()=>{
 document.getElementById("pageWelcome").classList.add("hidden");
 document.getElementById("pageChat").classList.remove("hidden");
 });
 document.getElementById("sendBtn")?.addEventListener("click",send);
 
-// modal close on outside click
+// click outside closes
 document.getElementById("modal").addEventListener("click",(e)=>{
 if(e.target.id==="modal"){closeModal();}
 });
 
-// ESC close
+// ESC closes
 document.addEventListener("keydown",(e)=>{
 if(e.key==="Escape"){closeModal();}
 });
