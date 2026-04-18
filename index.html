@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8"/>
-<title>Taylor Student</title>
+<title>Taylor Task</title>
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
@@ -13,6 +13,7 @@
 </header>
 
 <main id="pageWelcome">
+  <h2>Before you start</h2>
   <input id="firstName" placeholder="First name"/>
   <input id="lastName" placeholder="Last name"/>
   <textarea id="q3" placeholder="First message"></textarea>
@@ -21,7 +22,11 @@
 
 <main id="pageChat" class="hidden">
   <div class="layout">
-    <div class="card"><p>Task here</p></div>
+    <div class="card">
+      <h3>Task</h3>
+      <p>1/4 + 1/6 problem</p>
+    </div>
+
     <div class="card">
       <div id="chatLog"></div>
       <textarea id="userInput"></textarea>
@@ -29,6 +34,12 @@
     </div>
   </div>
 </main>
+
+<div id="analysisBox" class="hidden">
+  <h3>Analysis</h3>
+  <textarea id="analysisInput" placeholder="Your analysis"></textarea>
+  <button id="saveAnalysis">Save</button>
+</div>
 
 <script src="app.js"></script>
 </body>

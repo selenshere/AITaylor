@@ -19,6 +19,6 @@ async function login(){
 async function load(){
  const res=await fetch(API+"/api/class/"+classId);
  const data=await res.json();
- document.getElementById("dashboard").innerHTML=data.map(d=>`<div>${d.student_name} - ${d.status}</div>`).join("");
+ document.getElementById("list").innerHTML=data.map(d=>`<div>${d.student_name} - ${d.status}</div>`).join("");
  setTimeout(load,3000);
 }
