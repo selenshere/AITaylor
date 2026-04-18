@@ -8,11 +8,6 @@ const supabase = createClient("https://xrxbjcfmljimozznnvmy.supabase.co", "eyJhb
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-  if (error) return alert(error.message);
-
-  redirectByRole();
-}
-
 app.use(cors({
   origin: "*"
 }));
