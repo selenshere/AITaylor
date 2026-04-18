@@ -1,5 +1,5 @@
 const SUPABASE_URL = "https://xrxbjcfmljimozznnvmy.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyeGJqY2ZtbGppbW96em5udm15Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NjQzMzYyOCwiZXhwIjoyMDkyMDA5NjI4fQ.XrrUHsnu_rpO87MLvWBj_IljhPSZriEpMITTW89lw1g";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyeGJqY2ZtbGppbW96em5udm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0MzM2MjgsImV4cCI6MjA5MjAwOTYyOH0.Y9QvsAkD1FeAvRJrQTNdy59ridkXYQO1nfPul1LF34o";
 
 const supabase = window.supabase.createClient(
   SUPABASE_URL,
@@ -631,16 +631,6 @@ async function finishAndSubmit() {
     window.location.href = "/";
   }
 }
-
-  await supabase.from("submissions").insert([{
-  session_id: getSessionId(),
-  first_name: state.name.firstName,
-  last_name: state.name.lastName,
-  data: {
-    messages: state.messages,
-    annotations: state.annotations
-  }
-}]);
 
 submitBtn?.addEventListener("click", () => {
   finishAndSubmit().catch(err => {
