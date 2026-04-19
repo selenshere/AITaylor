@@ -276,13 +276,13 @@ if (state.name?.firstName && state.name?.lastName && state.preQuestions.q1 && st
 startBtn.addEventListener("click", async () => {
   formError.textContent = "";
 
-  const firstName = firstNameInput.value.trim();
-  const lastName = lastNameInput.value.trim();
+  const fn = firstNameInput.value.trim();
+  const ln = lastNameInput.value.trim();
+  const a = q1.value.trim();
+  const c = q3.value.trim();
   const classCode = document.getElementById("classCode").value.trim();
 
-  const q1Val = q1.value.trim();
-  const q3Val = q3.value.trim();
-
+  // ✅ class code kontrol
   if (!classCode) {
     formError.textContent = "Please enter the class code.";
     return;
@@ -299,33 +299,31 @@ startBtn.addEventListener("click", async () => {
     return;
   }
 
+  // 🔥 class_id kaydet
   localStorage.setItem("class_id", classData.id);
 
-  if (!firstName || !lastName) {
-    formError.textContent = "Please fill in all fields.";
+  // ✅ normal validation (senin eski çalışan yapı)
+  if (!fn || !ln) {
+    formError.textContent = "Please fill in first name and last name (required).";
     return;
   }
 
-  if (!q1Val || !q3Val) {
-    formError.textContent = "Please fill in all fields.";
+  if (!a || !c) {
+    formError.textContent = "Please answer both questions (required).";
     return;
   }
 
-  state.name.firstName = firstName;
-  state.name.lastName = lastName;
-  state.preQuestions.q1 = q1Val;
-  state.preQuestions.q3 = q3Val;
-
-  state.messages.push({
-    id: crypto.randomUUID(),
-    role: "user",
-    who: "teacher",
-    text: q3Val,
-    ts: new Date().toISOString()
-  });
-
+  // ✅ state kaydet
+  state.name = { firstName: fn, lastName: ln };
+  state.preQuestions = { q1: a, q3: c };
   persist();
+
   showChat();
+
+  // 🔥 Q3 ilk mesaj (ESKİ DOĞRU MANTIK)
+  if (state.messages.length === 0 && !chatPaused) {
+    await sendTeacherMessage(c);
+  }
 });
   
 // ---- Rendering ----
