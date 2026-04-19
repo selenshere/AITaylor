@@ -275,26 +275,35 @@ if (state.name?.firstName && state.name?.lastName && state.preQuestions.q1 && st
 // ---- Start button ----
 startBtn.addEventListener("click", async () => {
   formError.textContent = "";
-  const fn = firstNameInput.value.trim();
-  const ln = lastNameInput.value.trim();
-  const a = q1.value.trim();
-  const c = q3.value.trim();
 
-  if (!fn || !ln) { formError.textContent = "Please fill in first name and last name (required)."; return; }
-  if (!a || !c) { formError.textContent = "Please answer both questions (required)."; return; }
+  const firstName = firstNameInput.value.trim();
+  const lastName = lastNameInput.value.trim();
+  const classCode = document.getElementById("classCode").value.trim();
 
-  state.name = { firstName: fn, lastName: ln };
-  state.preQuestions = { q1: a, q3: c };
-  persist();
-
-  showChat();
-
-  // Auto-send first message (q3) if chat is empty
-  if (state.messages.length === 0 && !chatPaused) {
-    await sendTeacherMessage(c);
+  if (!classCode) {
+    formError.textContent = "Class code gerekli";
+    return;
   }
-});
 
+  const { data: classData } = await supabase
+    .from("classes")
+    .select("id")
+    .eq("class_code", classCode)
+    .single();
+
+  if (!classData) {
+    formError.textContent = "Geçersiz class code";
+    return;
+  }
+
+  localStorage.setItem("class_id", classData.id);
+
+  if (!firstName || !lastName) {
+    formError.textContent = "Please fill in all fields.";
+    return;
+  }
+
+});
 // ---- Rendering ----
 function el(tag, cls, text){
   const e = document.createElement(tag);
