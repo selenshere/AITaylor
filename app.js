@@ -590,7 +590,7 @@ function buildExportFiles() {
   ];
 }
 
-// ---- Download (cihaza indirmeye DEVAM) ----
+// ---- Download ----
 downloadBtn.addEventListener("click", () => {
   const files = buildExportFiles();
 
@@ -639,6 +639,18 @@ async function finishAndSubmit() {
     window.location.href = "/";
   }
 }
+
+const resetBtn = document.getElementById("resetBtn");
+
+resetBtn?.addEventListener("click", () => {
+  if (!confirm("Are you sure you want to reset the chat?")) return;
+
+  // local storage temizle
+  localStorage.removeItem("taylor_task_state");
+
+  // sayfayı resetle
+  window.location.reload();
+});
 
 submitBtn?.addEventListener("click", () => {
   finishAndSubmit().catch(err => {
