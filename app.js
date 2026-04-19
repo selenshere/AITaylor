@@ -280,6 +280,9 @@ startBtn.addEventListener("click", async () => {
   const lastName = lastNameInput.value.trim();
   const classCode = document.getElementById("classCode").value.trim();
 
+  const q1Val = q1.value.trim();
+  const q3Val = q3.value.trim();
+
   if (!classCode) {
     formError.textContent = "Please enter the class code.";
     return;
@@ -303,10 +306,23 @@ startBtn.addEventListener("click", async () => {
     return;
   }
 
+  if (!q1Val || !q3Val) {
+    formError.textContent = "Please fill in all fields.";
+    return;
+  }
+
   state.name.firstName = firstName;
   state.name.lastName = lastName;
-  state.preQuestions.q1 = q1.value.trim();
-  state.preQuestions.q3 = q3.value.trim();
+  state.preQuestions.q1 = q1Val;
+  state.preQuestions.q3 = q3Val;
+
+  state.messages.push({
+    id: crypto.randomUUID(),
+    role: "user",
+    who: "teacher",
+    text: q3Val,
+    ts: new Date().toISOString()
+  });
 
   persist();
   showChat();
