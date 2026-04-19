@@ -604,7 +604,7 @@ let submitting = false;
 function showSubmitThanks() {
   chatPaused = true;
   openModal(`
-    <h2>Thank you for your participation</h2>
+    <h2>Ihre Antwort wurde übermittelt. Vielen Dank!</h2>
   `);
 }
 
