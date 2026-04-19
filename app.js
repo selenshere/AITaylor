@@ -639,6 +639,7 @@ async function finishAndSubmit() {
   if (chatPaused) return;
 
   await supabase.from("submissions").insert([{
+  class_id: classId,
   session_id: getSessionId(),
   first_name: state.name.firstName,
   last_name: state.name.lastName,
