@@ -17,7 +17,6 @@ function buildAnalytics(item) {
     return sum + (m.text ? m.text.trim().split(/\s+/).length : 0);
   }, 0);
 
-  // ⏱ süre hesaplama
   let durationMin = 0;
   if (messages.length > 1) {
     const first = new Date(messages[0].ts).getTime();
@@ -187,10 +186,9 @@ ${textPreview}
         </pre>
       </details>
 
-      <button onclick='downloadJSON(${JSON.stringify(item)})'>JSON</button>
-      <button onclick='downloadTXT(${JSON.stringify(item)})'>TXT</button>
-      <button onclick='downloadAnalytics(${JSON.stringify(item)})'>Analytics</button>
-    `;
+      <button class="btn primary" onclick='downloadJSON(${JSON.stringify(item)})'> JSON </button>
+      <button class="btn secondary" onclick='downloadTXT(${JSON.stringify(item)})'> TXT </button>
+      <button class="btn secondary" onclick='downloadAnalytics(${JSON.stringify(item)})'> Analytics </button>`;
 
     list.appendChild(div);
   });
