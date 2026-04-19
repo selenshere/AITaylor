@@ -270,3 +270,7 @@ input[type="text"]:focus{border-color:rgba(37,99,235,.45)}
 .inputField:focus {
   border-color: rgba(37,99,235,.45);
 }
+
+ #copyBox {
+  display: none;
+}
