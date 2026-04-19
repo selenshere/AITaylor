@@ -3,6 +3,16 @@ const supabaseClient = window.supabase.createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyeGJqY2ZtbGppbW96em5udm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0MzM2MjgsImV4cCI6MjA5MjAwOTYyOH0.Y9QvsAkD1FeAvRJrQTNdy59ridkXYQO1nfPul1LF34o"
 );
 
+const { data: { user } } = await supabaseClient.auth.getUser();
+
+await supabaseClient.from("classes").insert([{
+  name: "My Class",
+  owner_id: user.id, // 🔥 EKLE
+  class_code: code
+}]);
+
+const classId = localStorage.getItem("class_id");
+
 // ---- ANALYTICS ----
 function buildAnalytics(item) {
   const messages = item.data?.messages || [];
