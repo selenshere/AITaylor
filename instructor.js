@@ -1,3 +1,6 @@
+SELECTED_CLASS_ID = prompt("Enter class_id");
+let SELECTED_CLASS_ID = null;
+
 const supabaseClient = window.supabase.createClient(
   "https://xrxbjcfmljimozznnvmy.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyeGJqY2ZtbGppbW96em5udm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0MzM2MjgsImV4cCI6MjA5MjAwOTYyOH0.Y9QvsAkD1FeAvRJrQTNdy59ridkXYQO1nfPul1LF34o"
@@ -151,6 +154,7 @@ async function loadData() {
   const { data, error } = await supabaseClient
     .from("submissions")
     .select("*")
+    .eq("class_id", SELECTED_CLASS_ID)
     .order("created_at", { ascending: false });
 
   if (error) {
