@@ -16,9 +16,9 @@
 
     <!-- PAGE 1 -->
     <section id="pageStart" class="card">
-      <h2>Welcome</h2>
+      <h2 style="text-align:center;">Welcome</h2>
 
-      <div class="row">
+      <div class="row" style="justify-content:center;">
         <button onclick="showCreate()" class="btn secondary">Create Class</button>
         <button onclick="showLogin()" class="btn secondary">Login to Class</button>
       </div>
@@ -43,8 +43,14 @@
         <button onclick="showLogin()" class="btn secondary">Go to Login</button>
       </div>
 
-      <!-- class code burada gösterilecek -->
+      <!-- RESULT -->
       <div id="classResult" class="ok" style="margin-top:10px;"></div>
+
+      <!-- COPY BOX -->
+      <div id="copyBox" class="row hidden" style="margin-top:10px;">
+        <input id="classCodeDisplay" readonly class="inputField" />
+        <button onclick="copyCode()" class="btn secondary">Copy</button>
+      </div>
     </section>
 
     <!-- PAGE 3 LOGIN -->
@@ -70,6 +76,9 @@
     <!-- DASHBOARD -->
     <section id="pageDashboard" class="card hidden">
       <h2>Dashboard</h2>
+
+      <!-- CLASS INFO -->
+      <div id="classInfo" style="margin-bottom:10px; font-weight:500;"></div>
 
       <div class="row">
         <button onclick="loadData()" class="btn secondary">Refresh</button>
