@@ -3,29 +3,73 @@ const supabaseClient = window.supabase.createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyeGJqY2ZtbGppbW96em5udm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0MzM2MjgsImV4cCI6MjA5MjAwOTYyOH0.Y9QvsAkD1FeAvRJrQTNdy59ridkXYQO1nfPul1LF34o"
 );
 
-async function createClass() {
-  const { data: { user } } = await supabaseClient.auth.getUser();
+function hideAll() {
+  document.querySelectorAll("section").forEach(s => s.classList.add("hidden"));
+}
 
-  if (!user) {
-    alert("Login olman gerekiyor");
-    return;
-  }
+function showCreate() {
+  hideAll();
+  document.getElementById("pageCreate").classList.remove("hidden");
+}
+
+function showLogin() {
+  hideAll();
+  document.getElementById("pageLogin").classList.remove("hidden");
+}
+
+function showDashboard() {
+  hideAll();
+  document.getElementById("pageDashboard").classList.remove("hidden");
+}
+
+// ---------------- CREATE CLASS ----------------
+
+async function createClass() {
+  const name = document.getElementById("className").value;
+  const password = document.getElementById("classPassword").value;
 
   const code = Math.random().toString(36).substring(2, 8).toUpperCase();
 
   const { error } = await supabaseClient
     .from("classes")
     .insert([{
-      name: "My Class",
-      owner_id: user.id,
-      class_code: code
+      name,
+      class_code: code,
+      password
     }]);
 
   if (error) {
     alert(error.message);
   } else {
     alert("Class code: " + code);
+    localStorage.setItem("class_code", code);
+    showDashboard();
+    loadData();
   }
+}
+
+// ---------------- LOGIN CLASS ----------------
+
+async function loginClass() {
+  const code = document.getElementById("loginCode").value;
+  const password = document.getElementById("loginPassword").value;
+
+  const { data, error } = await supabaseClient
+    .from("classes")
+    .select("*")
+    .eq("class_code", code)
+    .eq("password", password)
+    .single();
+
+  if (!data) {
+    alert("Wrong code or password");
+    return;
+  }
+
+  localStorage.setItem("class_id", data.id);
+
+  showDashboard();
+  loadData();
 }
 
 // ---- ANALYTICS ----
@@ -132,9 +176,12 @@ function downloadAnalytics(item) {
 
 // ---- CSV EXPORT ----
 async function exportCSV() {
+  const classId = localStorage.getItem("class_id");
+
   const { data } = await supabaseClient
     .from("submissions")
-    .select("*");
+    .select("*")
+    .eq("class_id", classId);
 
   if (!data || data.length === 0) {
     alert("No data");
@@ -173,9 +220,12 @@ async function exportCSV() {
 
 // ---- LOAD DATA ----
 async function loadData() {
+  const classId = localStorage.getItem("class_id");
+
   const { data, error } = await supabaseClient
     .from("submissions")
     .select("*")
+    .eq("class_id", classId)
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -212,5 +262,14 @@ ${textPreview}
   });
 }
 
-// auto load
-loadData();
+// ---------------- GLOBAL FIX ----------------
+window.createClass = createClass;
+window.loginClass = loginClass;
+window.loadData = loadData;
+window.exportCSV = exportCSV;
+window.showCreate = showCreate;
+window.showLogin = showLogin;
+
+// başlangıç ekranı
+hideAll();
+document.getElementById("pageStart")?.classList.remove("hidden");
