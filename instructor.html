@@ -4,25 +4,47 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Instructor Panel</title>
-
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <header class="topbar">
     <div class="brand">Instructor Panel</div>
-    <div class="right">
-      <button onclick="loadData()" class="btn secondary">Refresh</button>
-      <button onclick="exportCSV()" class="primaryBtn">Export CSV</button>
-      <button onclick="createClass()">Create Class</button>
-    </div>
   </header>
 
   <main class="page">
-    <section class="card">
-      <h2>All Submissions</h2>
+
+    <!-- PAGE 1 -->
+    <section id="pageStart" class="card">
+      <h2>Welcome</h2>
+      <button onclick="showCreate()">Create Class</button>
+      <button onclick="showLogin()">Login to Class</button>
+    </section>
+
+    <!-- PAGE 2 CREATE -->
+    <section id="pageCreate" class="card hidden">
+      <h2>Create Class</h2>
+      <input id="className" placeholder="Class name">
+      <input id="classPassword" placeholder="Password">
+      <button onclick="createClass()">Create</button>
+    </section>
+
+    <!-- PAGE 3 LOGIN -->
+    <section id="pageLogin" class="card hidden">
+      <h2>Login to Class</h2>
+      <input id="loginCode" placeholder="Class code">
+      <input id="loginPassword" placeholder="Password">
+      <button onclick="loginClass()">Login</button>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="pageDashboard" class="card hidden">
+      <h2>Dashboard</h2>
+      <button onclick="loadData()">Refresh</button>
+      <button onclick="exportCSV()">Export CSV</button>
       <div id="list"></div>
     </section>
+
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
