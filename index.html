@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Taylor Task Chatbot</title>
+  <title>Aufgabe zu Taylor</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -11,66 +11,62 @@
     <div class="brand">Taylor Task</div>
     <div class="right">
       <!--button id="newConvBtn" class="btn ghost" title="Clear everything and start over">Start a new conversation</button-->
-      <button id="submitBtn" class="primaryBtn"> Finish & Submit </button>
-      <button id="downloadBtn" class="btn secondary" title="Download all data">Download</button>
-      <button id="resetBtn" class="btn secondary"> Reset Chat </button>
+      <button id="submitBtn" class="primaryBtn"> Beenden und absenden </button>
+      <button id="downloadBtn" class="btn secondary" title="Download all data"> Herunterladen </button>
+      <button id="resetBtn" class="btn secondary"> Chat zurücksetzen </button>
     </div>
   </header>
 
   <!-- PAGE 1: WELCOME + FORM -->
   <main id="pageWelcome" class="page">
     <section class="card">
-      <h1>Welcome to the Taylor task</h1>
+      <h1>Willkommen zu AI Taylor</h1>
       <p>
-        In this activity, you will interact with Taylor, a simulated student who has solved the fraction problem
-        that you looked at last week (see the figure below for reference). Your task is to design activities, questions,
-        and/or representations (e.g., fraction bars, a number line, area models) to uncover Taylor’s underlying thinking and
-        look for ideas that make sense in Taylor’s reasoning. You have about 45 minutes to interact with Taylor. Design your
-        interaction thoughtfully.
+        In dieser Aktivität interagieren Sie mit AI Taylor, einer simulierten lernenden Person, die die Bruchaufgabe bearbeitet hat, mit der Sie sich zur Vorbereitung auf die Veranstaltung bereits beschäftigt haben. Ihre Aufgabe ist es, Aktivitäten, Fragen und/oder Darstellungen (z. B. Bruchstreifen, einen Zahlenstrahl oder Flächenmodelle) zu entwickeln, um Taylors zugrunde liegendes Denken besser zu verstehen. Für die Interaktion mit AI Taylor haben Sie etwa 45 Minuten Zeit. Gestalten Sie Ihren Austausch mit AI Taylor überlegt.
       </p>
     </section>
 
 
     <div class="welcomeGrid">
     <section class="card taskCard">
-      <h2>Task and Taylor's solution (fractions)</h2>
-      <p class="muted">Please review the task and Taylor’s solution below before starting.</p>
+      <h2>Bruchaufgabe und Taylors Lösung</h2>
+      <p class="muted">Bitte sehen Sie sich die Bruchaufgabe und Taylors Lösung vor Beginn noch einmal an.</p>
       <div class="taskImageWrapper">
         <img src="images/task.png" alt="Noticing task (fraction) with Taylor's solution and dialogue." />
       </div>
     </section>
 
     <section class="card">
-      <h2>Before you start</h2>
+      <h2>Bevor Sie beginnen</h2>
 
       <div class="nameRow">
         <label class="q">
-          <span>First name</span>
-          <input id="firstName" type="text" placeholder="First name..." />
-          <div class="hint">Required</div>
+          <span>Vorname</span>
+          <input id="firstName" type="text" placeholder="Vorname..." />
+          <div class="hint">Erforderlich</div>
         </label>
         <label class="q">
-          <span>Last name</span>
-          <input id="lastName" type="text" placeholder="Last name..." />
-          <div class="hint">Required</div>
+          <span>Vorname</span>
+          <input id="lastName" type="text" placeholder="Vorname..." />
+          <div class="hint">Erforderlich</div>
         </label>
       </div>
 
 
       <label class="q">
-        <span>1) What would you most like to understand more deeply about Taylor’s thinking?</span>
-        <textarea id="q1" rows="4" placeholder="Write your answer..."></textarea>
-        <div class="hint">Required</div>
+        <span>1) Was würden Sie an Taylors Denken besonders gern genauer verstehen?</span>
+        <textarea id="q1" rows="4" placeholder="Schreiben Sie hier Ihre Antwort …"></textarea>
+        <div class="hint">Erforderlich</div>
       </label>
 
       <label class="q">
-        <span>2) Please write your first message to Taylor. Try to start in a way that helps you understand Taylor’s thinking.</span>
-        <textarea id="q3" rows="3" placeholder="Write your first message..."></textarea>
-        <div class="hint">Required</div>
+        <span>2) Schreiben Sie Ihre erste Nachricht an AI Taylor. Wählen Sie dabei einen Einstieg, der Ihnen hilft, Taylors Denken besser zu verstehen.</span>
+        <textarea id="q3" rows="3" placeholder="Schreiben Sie Ihre erste Nachricht..."></textarea>
+        <div class="hint">Erforderlich</div>
       </label>
 
       <div class="row">
-        <button id="startBtn" class="btn primary">Start Chat</button>
+        <button id="startBtn" class="btn primary">Chat starten</button>
         <div id="formError" class="error" aria-live="polite"></div>
       </div>
     </section>
@@ -82,7 +78,7 @@
     <div class="layout">
       <!-- LEFT: TASK + ANALYSIS POPUP -->
       <section class="card taskCard taskPane">
-        <h2>Task and Taylor's solution (fractions)</h2>
+        <h2>Bruchaufgabe und Taylors Lösung</h2>
         <div class="taskImageWrapper">
           <img src="images/task.png" alt="Task and Taylor's solution (fractions)" />
         </div>
