@@ -43,9 +43,12 @@ async function createClass() {
   if (error) {
     alert(error.message);
   } else {
-    alert("Class code: " + code);
+    document.getElementById("classResult").innerText = "Class created!";
+    document.getElementById("copyBox").classList.remove("hidden");
+    document.getElementById("classCodeDisplay").value = code;
+    document.getElementById("classInfo").innerText =
+      `Class: ${name} | Code: ${code}`;
 
-    // 🔥 EN KRİTİK SATIR
     localStorage.setItem("class_id", data.id);
 
     showDashboard();
@@ -70,6 +73,9 @@ async function loginClass() {
     alert("Wrong code or password");
     return;
   }
+
+  document.getElementById("classInfo").innerText =
+  `Class: ${data.name} | Code: ${data.class_code}`;
 
   localStorage.setItem("class_id", data.id);
 
@@ -278,3 +284,9 @@ window.showLogin = showLogin;
 // başlangıç ekranı
 hideAll();
 document.getElementById("pageStart")?.classList.remove("hidden");
+
+function copyCode() {
+  const input = document.getElementById("classCodeDisplay");
+  input.select();
+  document.execCommand("copy");
+}
