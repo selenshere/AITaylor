@@ -273,8 +273,6 @@ if (state.name?.firstName && state.name?.lastName && state.preQuestions.q1 && st
 } else {
   showWelcome();
 }
-
-<input id="classCode" placeholder="Enter class code"/>
     
 // ---- Start button ----
 startBtn.addEventListener("click", async () => {
