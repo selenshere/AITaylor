@@ -281,7 +281,7 @@ startBtn.addEventListener("click", async () => {
   const classCode = document.getElementById("classCode").value.trim();
 
   if (!classCode) {
-    formError.textContent = "Class code gerekli";
+    formError.textContent = "Please enter the class code.";
     return;
   }
 
@@ -292,7 +292,7 @@ startBtn.addEventListener("click", async () => {
     .single();
 
   if (!classData) {
-    formError.textContent = "Geçersiz class code";
+    formError.textContent = "Invalid class code.";
     return;
   }
 
@@ -302,6 +302,15 @@ startBtn.addEventListener("click", async () => {
     formError.textContent = "Please fill in all fields.";
     return;
   }
+
+  state.name.firstName = firstName;
+  state.name.lastName = lastName;
+  state.preQuestions.q1 = q1.value.trim();
+  state.preQuestions.q3 = q3.value.trim();
+
+  persist();
+  showChat();
+});
 
 });
 // ---- Rendering ----
