@@ -172,13 +172,6 @@ async function loadData() {
       <b>${analytics.name}</b><br>
       <small>${new Date(item.created_at).toLocaleString()}</small><br><br>
 
-      <div style="font-size:12px; margin-bottom:10px;">
-        Messages: ${analytics.total_messages} |
-        Words: ${analytics.total_words} |
-        Chars: ${analytics.total_characters} |
-        ⏱ ${analytics.duration_minutes} min
-      </div>
-
       <details>
         <summary>Preview</summary>
         <pre style="max-height:200px; overflow:auto; background:#f5f5f5; padding:10px;">
