@@ -364,7 +364,7 @@ function setChatDisabled(disabled){
     chatCard.classList.add("is-disabled");
     sendBtn.disabled = true;
     userInput.disabled = true;
-    apiStatus.textContent = "paused";
+    apiStatus.textContent = "Pausiert";
     if (finishBtn) finishBtn.disabled = true;
   } else {
     chatCard.classList.remove("is-disabled");
@@ -470,7 +470,7 @@ async function sendTeacherMessage(text){
   renderChat();
   updateCounts();
 
-  apiStatus.textContent = "thinking…";
+  apiStatus.textContent = "Denkt nach...";
 
   try{
     const taylorText = await fetchTaylorReply();
