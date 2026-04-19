@@ -22,12 +22,6 @@
         <button onclick="showCreate()" class="btn secondary">Create Class</button>
         <button onclick="showLogin()" class="btn secondary">Login to Class</button>
       </div>
-
-      <div id="classResult"></div>
-      <div id="copyBox" class="row hidden">
-        <input id="classCodeDisplay" readonly />
-        <button onclick="copyCode()">Copy</button>
-      </div>
     </section>
 
     <!-- PAGE 2 CREATE -->
@@ -51,6 +45,11 @@
 
       <!-- RESULT -->
       <div id="classResult" class="ok" style="margin-top:10px;"></div>
+      
+      <div id="copyBox" class="row hidden" style="margin-top:8px;">
+        <input id="classCodeDisplay" readonly class="inputField" />
+        <button onclick="copyCode()" class="btn secondary">Copy</button>
+      </div>
     </section>
 
     <!-- PAGE 3 LOGIN -->
