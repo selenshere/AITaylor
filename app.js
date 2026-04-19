@@ -292,6 +292,8 @@ if (!cls) {
 CURRENT_CLASS_ID = cls.id;
 localStorage.setItem("class_id", cls.id);
 
+});
+
 // ---- Rendering ----
 function el(tag, cls, text){
   const e = document.createElement(tag);
@@ -683,4 +685,3 @@ submitBtn?.addEventListener("click", () => {
   });
 });
 }
-)
