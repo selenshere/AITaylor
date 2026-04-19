@@ -274,7 +274,7 @@ if (state.name?.firstName && state.name?.lastName && state.preQuestions.q1 && st
   showWelcome();
 }
 
-<input id="classCode" placeholder="Enter class code" />
+<input id="classCode" placeholder="Enter class code"/>
     
 // ---- Start button ----
 startBtn.addEventListener("click", async () => {
