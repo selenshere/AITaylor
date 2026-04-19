@@ -86,67 +86,67 @@
       <section class="card taskCard taskPane">
         <h2>Bruchaufgabe und Taylors Lösung</h2>
         <div class="taskImageWrapper">
-          <img src="images/task.png" alt="Task and Taylor's solution (fractions)" />
+          <img src="images/task.png" alt="Bruchaufgabe und Taylors Lösung" />
         </div>
 
         <!-- Analysis popup (auto-opens after each Taylor reply) -->
         <div id="analysisOverlay" class="overlay hidden" aria-hidden="true">
-          <div class="overlayCard" role="dialog" aria-modal="true" aria-label="Analysis">
+          <div class="overlayCard" role="dialog" aria-modal="true" aria-label="Analyse">
             <div class="analysisHeader">
               <h2>Analysis</h2>
-              <p class="subtle">Complete the required questions to continue the conversation.</p>
+              <p class="subtle">Beantworten Sie die erforderlichen Fragen, um das Gespräch fortzusetzen.</p>
             </div>
 
             <div class="selectedBox">
-              <div class="label">Taylor’s last response:</div>
+              <div class="label">Taylors letzte Antwort:</div>
               <div id="selectedText" class="selectedText"></div>
             </div>
 
             <div class="block">
-              <div class="label">a) Choose one (optional)</div>
+              <div class="label">a) Wählen Sie eine Kategorie aus (optional) </div>
 
               <label class="tagOption">
-                <input type="radio" name="tagType" value="Problematic">
+                <input type="radio" name="tagType" value="Problematisch">
                 <span class="tagText">
-                  <span class="tagTitle">Problematic</span>
-                  <span class="tagDesc">Something you see as incorrect or confusing</span>
+                  <span class="tagTitle">Problematisch</span>
+                  <span class="tagDesc">Etwas, das Sie für fehlerhaft oder verwirrend halteng </span>
                 </span>
               </label>
 
               <label class="tagOption">
-                <input type="radio" name="tagType" value="Interesting idea">
+                <input type="radio" name="tagType" value="Interessante Idee">
                 <span class="tagText">
-                  <span class="tagTitle">Interesting idea</span>
-                  <span class="tagDesc">Something you find noteworthy</span>
+                  <span class="tagTitle">Interessante Idee</span>
+                  <span class="tagDesc">Etwas, das Sie bemerkenswert finden</span>
                 </span>
               </label>
 
               <label class="tagOption">
-                <input type="radio" name="tagType" value="Potential strength">
+                <input type="radio" name="tagType" value="Mögliches Potenzial">
                 <span class="tagText">
-                  <span class="tagTitle">Potential strength</span>
-                  <span class="tagDesc">Something you could imagine building on</span>
+                  <span class="tagTitle">Mögliches Potenzial</span>
+                  <span class="tagDesc">Etwas, an das Sie weiter anknüpfen könnten</span>
                 </span>
               </label>
             </div>
 
             <div class="block">
-              <label class="label">b) Why did you tag this? (optional)</label>
-              <textarea id="tagWhy" rows="3" placeholder="Write your answer..."></textarea>
+              <label class="label">Warum haben Sie dies markiert? (optional)</label>
+              <textarea id="tagWhy" rows="3" placeholder="Schreiben Sie hier Ihre Antwort..."></textarea>
             </div>
 
             <div class="block">
-              <label class="label req">c) What does it show for Taylor's thinking? (required)</label>
-              <textarea id="reasoning" rows="3" placeholder="Write your answer..."></textarea>
+              <label class="label req">c) Was lässt sich daran über Taylors Denken erkennen? (erforderlich)</label>
+              <textarea id="reasoning" rows="3" placeholder="Schreiben Sie hier Ihre Antwort..."></textarea>
             </div>
 
             <div class="block">
-              <label class="label req">d) What are you trying to do with your next message to Taylor? (required)</label>
-              <textarea id="nextIntent" rows="3" placeholder="Write your answer..."></textarea>
+              <label class="label req">d) Was möchten Sie mit Ihrer nächsten Nachricht an Taylor erreichen? (erforderlich)</label>
+              <textarea id="nextIntent" rows="3" placeholder="Schreiben Sie hier Ihre Antwort..."></textarea>
             </div>
 
             <div class="row">
-              <button id="saveReturnBtn" class="btn primary wide">Save and return conversation</button>
+              <button id="saveReturnBtn" class="btn primary wide">Speichern und zum Gespräch zurückkehren</button>
               <div id="tagSaved" class="ok" aria-live="polite"></div>
             </div>
           </div>
@@ -157,18 +157,18 @@
       <section class="card chat">
         <div class="chatHeader">
           <div>
-            <h2>Chat with Taylor</h2>
+            <h2>Chat mit Taylor</h2>
           </div>
           <div class="status">
-            <span id="apiStatus" class="pill">ready</span>
+            <span id="apiStatus" class="pill">Bereit</span>
           </div>
         </div>
 
         <div id="chatLog" class="chatLog" aria-live="polite"></div>
 
         <div class="composer">
-          <textarea id="userInput" rows="2" placeholder="Write to Taylor..."></textarea>
-          <button id="sendBtn" class="btn primary">Send</button>
+          <textarea id="userInput" rows="2" placeholder="Schreiben Sie an Taylor..."></textarea>
+          <button id="sendBtn" class="btn primary">Senden</button>
         </div>
       </section>
     </div>
