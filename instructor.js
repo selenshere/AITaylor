@@ -1,5 +1,5 @@
-SELECTED_CLASS_ID = prompt("Enter class_id");
 let SELECTED_CLASS_ID = null;
+SELECTED_CLASS_ID = prompt("Enter class_id");
 
 const supabaseClient = window.supabase.createClient(
   "https://xrxbjcfmljimozznnvmy.supabase.co",
