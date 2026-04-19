@@ -30,19 +30,24 @@ async function createClass() {
 
   const code = Math.random().toString(36).substring(2, 8).toUpperCase();
 
-  const { error } = await supabaseClient
+  const { data, error } = await supabaseClient
     .from("classes")
     .insert([{
       name,
       class_code: code,
       password
-    }]);
+    }])
+    .select()    
+    .single();  
 
   if (error) {
     alert(error.message);
   } else {
     alert("Class code: " + code);
-    localStorage.setItem("class_code", code);
+
+    // 🔥 EN KRİTİK SATIR
+    localStorage.setItem("class_id", data.id);
+
     showDashboard();
     loadData();
   }
