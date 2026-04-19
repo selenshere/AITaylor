@@ -311,8 +311,7 @@ startBtn.addEventListener("click", async () => {
   persist();
   showChat();
 });
-
-});
+  
 // ---- Rendering ----
 function el(tag, cls, text){
   const e = document.createElement(tag);
