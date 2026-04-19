@@ -1,5 +1,3 @@
-let CURRENT_CLASS_ID = null;
-
 if (!window.__app_initialized__) {
   window.__app_initialized__ = true;
   
@@ -273,25 +271,28 @@ if (state.name?.firstName && state.name?.lastName && state.preQuestions.q1 && st
 } else {
   showWelcome();
 }
-    
+
 // ---- Start button ----
 startBtn.addEventListener("click", async () => {
-const code = document.getElementById("classCode").value.trim();
+  formError.textContent = "";
+  const fn = firstNameInput.value.trim();
+  const ln = lastNameInput.value.trim();
+  const a = q1.value.trim();
+  const c = q3.value.trim();
 
-const { data: cls } = await supabase
-  .from("classes")
-  .select("*")
-  .eq("class_code", code)
-  .single();
+  if (!fn || !ln) { formError.textContent = "Please fill in first name and last name (required)."; return; }
+  if (!a || !c) { formError.textContent = "Please answer both questions (required)."; return; }
 
-if (!cls) {
-  alert("Invalid class code");
-  return;
-}
+  state.name = { firstName: fn, lastName: ln };
+  state.preQuestions = { q1: a, q3: c };
+  persist();
 
-CURRENT_CLASS_ID = cls.id;
-localStorage.setItem("class_id", cls.id);
+  showChat();
 
+  // Auto-send first message (q3) if chat is empty
+  if (state.messages.length === 0 && !chatPaused) {
+    await sendTeacherMessage(c);
+  }
 });
 
 // ---- Rendering ----
@@ -641,7 +642,6 @@ async function finishAndSubmit() {
   session_id: getSessionId(),
   first_name: state.name.firstName,
   last_name: state.name.lastName,
-  class_id: localStorage.getItem("class_id"),
   data: {
     messages: state.messages,
     annotations: state.annotations
