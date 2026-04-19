@@ -638,6 +638,13 @@ downloadBtn.addEventListener("click", () => {
 async function finishAndSubmit() {
   if (chatPaused) return;
 
+  const classId = localStorage.getItem("class_id");
+
+if (!classId) {
+  alert("Class code girilmemiş");
+  return;
+}
+  
   await supabase.from("submissions").insert([{
   class_id: classId,
   session_id: getSessionId(),
