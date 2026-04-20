@@ -742,12 +742,12 @@ resetBtn?.addEventListener("click", () => {
 
 submitBtn?.addEventListener("click", () => {
   finishAndSubmit().catch(err => {
-    // hata olursa tekrar denemeye izin ver
     submitting = false;
     if (submitBtn) submitBtn.disabled = false;
     alert(err.message);
   });
+});
 
-  window.addEventListener("beforeunload", () => {
+window.addEventListener("beforeunload", () => {
   persist();
-})
+});
