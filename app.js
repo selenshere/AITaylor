@@ -752,3 +752,4 @@ submitBtn?.addEventListener("click", () => {
 window.addEventListener("beforeunload", () => {
   persist();
 });
+});
