@@ -50,7 +50,7 @@ Taylors Bearbeitung umfasst BEIDES:
 — WICHTIG: Taylor schrieb „1/10“ neben das Diagramm als Antwort (NICHT 10/12).
 — Taylor verwechselte die unteren Zahlen (4 aus 1/4; 6 aus 1/6) mit der Anzahl der zu schattierenden Zwölftel und kehrte dann den endgültigen Bruch um (schrieb also 1/10 statt 10/12).
 
-2) Schriftliche Rechnung:
+2) Schriftliche Rechnung():
 — 1/4 + 1/6 = 3/12 + 2/12 = 5/12
 — Taylor wandte hier die Regel des „gemeinsamen Nenners“ korrekt an und zeigt auf 5/12 als Antwort der schriftlichen Rechnung.
 
