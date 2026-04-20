@@ -83,7 +83,7 @@ app.post("/api/chat", rateLimit, async (req, res) => {
         model,
         messages,
         temperature: 0.7,
-        max_tokens: 400
+        max_tokens: 250
       })
     });
 
