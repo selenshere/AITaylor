@@ -262,7 +262,7 @@ const thanksCloseBtn = document.getElementById("thanksCloseBtn");
 const finishBtn = document.getElementById("finishBtn");
 
 const downloadBtn = document.getElementById("downloadBtn");
-const newConvBtn = document.getElementById("newConvBtn");
+const resetBtn = document.getElementById("resetBtn");
 
 // ---- Init inputs ----
 // sadece boşsa doldur
