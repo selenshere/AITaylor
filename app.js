@@ -476,9 +476,10 @@ sendBtn.addEventListener("click", async () => {
 userInput.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === "Enter") sendBtn.click();
 });
-
-localStorage.removeItem("draft_message");  
+  
 async function sendTeacherMessage(text){
+  localStorage.removeItem("draft_message");
+  
   if (chatPaused) return;
   if (teacherMessageCount() >= MAX_TEACHER_MESSAGES) return;
 
@@ -746,6 +747,7 @@ submitBtn?.addEventListener("click", () => {
     if (submitBtn) submitBtn.disabled = false;
     alert(err.message);
   });
+
   window.addEventListener("beforeunload", () => {
   persist();
 })
