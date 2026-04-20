@@ -626,6 +626,17 @@ function openModal(html){
   box.querySelector("#__modalCloseBtn").addEventListener("click", () => wrap.remove());
 }
 
+// ---- Submit ----
+const submitBtn = document.getElementById("submitBtn");
+let submitting = false;
+
+function showSubmitThanks() {
+  chatPaused = true;
+  openModal(`
+    <h2>Ihre Antwort wurde übermittelt. Vielen Dank!</h2>
+  `);
+}
+
 // ---- Download ----
 function safeBaseName() {
   const fn = (state.name?.firstName || "").trim();
