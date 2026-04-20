@@ -592,8 +592,10 @@ if (saveReturnBtn) {
  resetBtn?.addEventListener("click", () => {
   if (!confirm("Are you sure you want to reset the chat?")) return;
 
-  localStorage.clear();
+  // local storage temizle
+  localStorage.removeItem("taylor_task_state");
 
+  // sayfayı resetle 
   window.location.reload();
 });
 
@@ -622,17 +624,6 @@ function openModal(html){
   document.body.appendChild(wrap);
 
   box.querySelector("#__modalCloseBtn").addEventListener("click", () => wrap.remove());
-}
-
-// ---- Submit: Drive upload + popup (double-click safe) ----
-const submitBtn = document.getElementById("submitBtn");
-let submitting = false;
-
-function showSubmitThanks() {
-  chatPaused = true;
-  openModal(`
-    <h2>Ihre Antwort wurde übermittelt. Vielen Dank!</h2>
-  `);
 }
 
 // ---- Download ----
@@ -729,18 +720,6 @@ if (!classId) {
     window.location.href = "/";
   }
 }
-
-const resetBtn = document.getElementById("resetBtn");
-
-resetBtn?.addEventListener("click", () => {
-  if (!confirm("Are you sure you want to reset the chat?")) return;
-
-  // local storage temizle
-  localStorage.removeItem("taylor_task_state");
-
-  // sayfayı resetle
-  window.location.reload();
-});
 
 submitBtn?.addEventListener("click", () => {
   finishAndSubmit().catch(err => {
