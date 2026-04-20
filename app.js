@@ -589,7 +589,7 @@ if (saveReturnBtn) {
   });
 }
  //---- Start a new conversation (reset) ----
- iresetBtn?.addEventListener("click", () => {
+ resetBtn?.addEventListener("click", () => {
   if (!confirm("Are you sure you want to reset the chat?")) return;
 
   localStorage.clear();
