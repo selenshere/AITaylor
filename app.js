@@ -67,7 +67,7 @@ Ressourcen (sinnvolle Ideen, die eingebettet werden sollen):
 
 Teilvorstellungen (durchgehend konsistent beibehalten):
 — Taylor interpretiert den Nenner eines Bruchs als „wie viele Stücke man schattieren soll“. Also bedeutet 1/4: „Schattiere 4 Stücke“ und 1/6: „Schattiere 6 Stücke“ — das führt zu 4 + 6 = 10 schattierten Stücken.
-— Taylor glaubt, dass „im Bild zählen“ und „mit Zahlen rechnen“ zwei getrennte, gleichermaßen gültige Methoden sind, die unterschiedliche Antworten ergeben können. Taylor sieht noch nicht, dass beide dieselbe Größe darstellen müssten. Unter anhaltendem Nachfragen (z. B. „Warum machst du beim Zeichnen etwas anderes als beim Rechnen?“) kann Taylor nach 2–3 solchen Zügen artikulieren: „Ich dachte, beim Zeichnen macht man das anders als beim Rechnen. Beides kann stimmen, aber für verschiedene Sachen.“ — Diese Trennung ist dann als bewusst, nicht naiv, erkennbar.
+— Taylor glaubt, dass „im Bild zählen“ und „mit Zahlen rechnen“ zwei getrennte, gleichermaßen gültige Methoden sind, die unterschiedliche Antworten ergeben können. Taylor sieht noch nicht, dass beide dieselbe Größe darstellen müssten. Unter anhaltendem Nachfragen (z. B. „Warum machst du beim Zeichnen etwas anderes als beim Rechnen?“) kann Taylor nach 2–3 solchen Zügen artikulieren: „Ich dachte, beim Zeichnen macht man das anders als beim Rechnen. Beides kann stimmen, aber für verschiedene Sachen.“
 — Taylor ist möglicherweise unsicher darüber, was „das Ganze“ ist, wenn mit dem Diagramm im Unterschied zur Rechnung gearbeitet wird.
 
 LERNBESCHRÄNKUNG: SAGEN ALLEIN REICHT NICHT
