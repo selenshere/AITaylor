@@ -226,29 +226,6 @@ const userInput = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
 const apiStatus = document.getElementById("apiStatus");
 
-document.querySelectorAll("input, textarea").forEach(el => {
-
-  const key = "autosave_" + el.id;
-
-  el.addEventListener("input", () => {
-    localStorage.setItem(key, el.value);
-  });
-
-  const saved = localStorage.getItem(key);
-  if (saved && !el.value) {
-    el.value = saved;
-  }
-});
-  
-userInput.addEventListener("input", () => {
-  localStorage.setItem("draft_message", userInput.value);
-});
-
-const savedDraft = localStorage.getItem("draft_message");
-if (savedDraft) {
-  userInput.value = savedDraft;
-}
-
 const selectedText = document.getElementById("selectedText");
 const analysisOverlay = document.getElementById("analysisOverlay");
 const tagWhy = document.getElementById("tagWhy");
@@ -262,14 +239,13 @@ const thanksCloseBtn = document.getElementById("thanksCloseBtn");
 const finishBtn = document.getElementById("finishBtn");
 
 const downloadBtn = document.getElementById("downloadBtn");
-const resetBtn = document.getElementById("resetBtn");
+const newConvBtn = document.getElementById("newConvBtn");
 
 // ---- Init inputs ----
-// sadece boşsa doldur
-if (!firstNameInput.value) firstNameInput.value = state.name?.firstName || "";
-if (!lastNameInput.value) lastNameInput.value = state.name?.lastName || "";
-if (!q1.value) q1.value = state.preQuestions.q1 || "";
-if (!q3.value) q3.value = state.preQuestions.q3 || "";
+firstNameInput.value = state.name?.firstName || "";
+lastNameInput.value = state.name?.lastName || "";
+q1.value = state.preQuestions.q1 || "";
+q3.value = state.preQuestions.q3 || "";
 
 // ---- View helpers ----
 function showWelcome(){ pageWelcome.classList.remove("hidden"); pageChat.classList.add("hidden"); }
@@ -290,7 +266,7 @@ function updateCounts(){
   }
 }
 
-if (state.messages.length > 0) {
+if (state.name?.firstName && state.name?.lastName && state.preQuestions.q1 && state.preQuestions.q3) {
   showChat();
 } else {
   showWelcome();
@@ -477,10 +453,8 @@ sendBtn.addEventListener("click", async () => {
 userInput.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === "Enter") sendBtn.click();
 });
-  
+
 async function sendTeacherMessage(text){
-  localStorage.removeItem("draft_message");
-  
   if (chatPaused) return;
   if (teacherMessageCount() >= MAX_TEACHER_MESSAGES) return;
 
@@ -589,15 +563,12 @@ if (saveReturnBtn) {
   });
 }
  //---- Start a new conversation (reset) ----
- resetBtn?.addEventListener("click", () => {
-  if (!confirm("Are you sure you want to reset the chat?")) return;
-
-  // local storage temizle (her şeyi sil)
-  localStorage.clear();
-
-  // sayfayı resetle 
-  window.location.reload();
-});
+ if (newConvBtn) {
+  newConvBtn.addEventListener("click", () => {
+    localStorage.removeItem("taylor_task_state");
+    window.location.href = window.location.pathname;
+  });
+}
 
 // ---- Simple modal helper ----
 function openModal(html){
@@ -626,7 +597,7 @@ function openModal(html){
   box.querySelector("#__modalCloseBtn").addEventListener("click", () => wrap.remove());
 }
 
-// ---- Submit ----
+// ---- Submit: Drive upload + popup (double-click safe) ----
 const submitBtn = document.getElementById("submitBtn");
 let submitting = false;
 
@@ -732,15 +703,24 @@ if (!classId) {
   }
 }
 
+const resetBtn = document.getElementById("resetBtn");
+
+resetBtn?.addEventListener("click", () => {
+  if (!confirm("Are you sure you want to reset the chat?")) return;
+
+  // local storage temizle
+  localStorage.removeItem("taylor_task_state");
+
+  // sayfayı resetle
+  window.location.reload();
+});
+
 submitBtn?.addEventListener("click", () => {
   finishAndSubmit().catch(err => {
+    // hata olursa tekrar denemeye izin ver
     submitting = false;
     if (submitBtn) submitBtn.disabled = false;
     alert(err.message);
   });
-});
-
-window.addEventListener("beforeunload", () => {
-  persist();
 });
 }
