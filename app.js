@@ -589,12 +589,13 @@ if (saveReturnBtn) {
   });
 }
  //---- Start a new conversation (reset) ----
- if (newConvBtn) {
-  newConvBtn.addEventListener("click", () => {
-    localStorage.removeItem("taylor_task_state");
-    window.location.href = window.location.pathname;
-  });
-}
+ iresetBtn?.addEventListener("click", () => {
+  if (!confirm("Are you sure you want to reset the chat?")) return;
+
+  localStorage.clear();
+
+  window.location.reload();
+});
 
 // ---- Simple modal helper ----
 function openModal(html){
