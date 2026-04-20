@@ -226,6 +226,29 @@ const userInput = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
 const apiStatus = document.getElementById("apiStatus");
 
+document.querySelectorAll("input, textarea").forEach(el => {
+
+  const key = "autosave_" + el.id;
+
+  el.addEventListener("input", () => {
+    localStorage.setItem(key, el.value);
+  });
+
+  const saved = localStorage.getItem(key);
+  if (saved && !el.value) {
+    el.value = saved;
+  }
+});
+  
+userInput.addEventListener("input", () => {
+  localStorage.setItem("draft_message", userInput.value);
+});
+
+const savedDraft = localStorage.getItem("draft_message");
+if (savedDraft) {
+  userInput.value = savedDraft;
+}
+
 const selectedText = document.getElementById("selectedText");
 const analysisOverlay = document.getElementById("analysisOverlay");
 const tagWhy = document.getElementById("tagWhy");
@@ -454,6 +477,7 @@ userInput.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === "Enter") sendBtn.click();
 });
 
+localStorage.removeItem("draft_message");  
 async function sendTeacherMessage(text){
   if (chatPaused) return;
   if (teacherMessageCount() >= MAX_TEACHER_MESSAGES) return;
@@ -722,5 +746,6 @@ submitBtn?.addEventListener("click", () => {
     if (submitBtn) submitBtn.disabled = false;
     alert(err.message);
   });
+  window.addEventListener("beforeunload", () => {
+  persist();
 });
-}
