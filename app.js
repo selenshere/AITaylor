@@ -592,8 +592,8 @@ if (saveReturnBtn) {
  resetBtn?.addEventListener("click", () => {
   if (!confirm("Are you sure you want to reset the chat?")) return;
 
-  // local storage temizle
-  localStorage.removeItem("taylor_task_state");
+  // local storage temizle (her şeyi sil)
+  localStorage.clear();
 
   // sayfayı resetle 
   window.location.reload();
