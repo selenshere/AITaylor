@@ -265,10 +265,11 @@ const downloadBtn = document.getElementById("downloadBtn");
 const newConvBtn = document.getElementById("newConvBtn");
 
 // ---- Init inputs ----
-firstNameInput.value = state.name?.firstName || "";
-lastNameInput.value = state.name?.lastName || "";
-q1.value = state.preQuestions.q1 || "";
-q3.value = state.preQuestions.q3 || "";
+// sadece boşsa doldur
+if (!firstNameInput.value) firstNameInput.value = state.name?.firstName || "";
+if (!lastNameInput.value) lastNameInput.value = state.name?.lastName || "";
+if (!q1.value) q1.value = state.preQuestions.q1 || "";
+if (!q3.value) q3.value = state.preQuestions.q3 || "";
 
 // ---- View helpers ----
 function showWelcome(){ pageWelcome.classList.remove("hidden"); pageChat.classList.add("hidden"); }
