@@ -290,7 +290,7 @@ function updateCounts(){
   }
 }
 
-if (state.name?.firstName && state.name?.lastName && state.preQuestions.q1 && state.preQuestions.q3) {
+if (state.messages.length > 0) {
   showChat();
 } else {
   showWelcome();
