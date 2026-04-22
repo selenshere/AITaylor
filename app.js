@@ -734,14 +734,3 @@ submitBtn?.addEventListener("click", () => {
   });
 });
 }
-
-const saved = localStorage.getItem("taylor_task_state");
-
-if (saved) {
-  try {
-    Object.assign(state, JSON.parse(saved));
-  } catch (e) {
-    console.error("State load error:", e);
-    localStorage.removeItem("taylor_task_state");
-  }
-}
