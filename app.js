@@ -261,6 +261,28 @@ lastNameInput.value = state.name?.lastName || "";
 q1.value = state.preQuestions.q1 || "";
 q3.value = state.preQuestions.q3 || "";
 
+// ---- AUTO SAVE INPUTS ----
+
+firstNameInput.addEventListener("input", () => {
+  state.name.firstName = firstNameInput.value.trim();
+  persist();
+});
+
+lastNameInput.addEventListener("input", () => {
+  state.name.lastName = lastNameInput.value.trim();
+  persist();
+});
+
+q1.addEventListener("input", () => {
+  state.preQuestions.q1 = q1.value.trim();
+  persist();
+});
+
+q3.addEventListener("input", () => {
+  state.preQuestions.q3 = q3.value.trim();
+  persist();
+});
+
 // ---- View helpers ----
 function showWelcome(){ pageWelcome.classList.remove("hidden"); pageChat.classList.add("hidden"); }
 function showChat(){
