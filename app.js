@@ -730,7 +730,7 @@ submitBtn?.addEventListener("click", () => {
 const state = {
   sessionId: crypto.randomUUID(),
   startedAt: new Date().toISOString(),
-classCode: { classCode ""},
+  classCode: { classCode ""},
   name: { firstName: "", lastName: "" },
   preQuestions: { q1: "", q2: "", q3: "" },
   messages: [],
