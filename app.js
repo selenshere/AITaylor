@@ -676,8 +676,10 @@ function buildExportFiles() {
 
   const base = safeBaseName();
   return [
-    { name: `${base}_chat.txt`, mimeType: "text/plain", content: fullTranscript },
-   // { name: `${base}_all.json`, mimeType: "application/json", content: JSON.stringify(exportObj, null, 2) },
+    { name: `${base}_chat.txt`,
+     mimeType: "text/plain",
+     content: fullTranscript
+    },
   ];
 }
 
