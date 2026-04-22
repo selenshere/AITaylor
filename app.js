@@ -725,3 +725,29 @@ submitBtn?.addEventListener("click", () => {
   });
 });
 }
+
+// ---- IGNORE ——REFRESH BUTTON
+const state = {
+  sessionId: crypto.randomUUID(),
+  startedAt: new Date().toISOString(),
+classCode: { classCode ""},
+  name: { firstName: "", lastName: "" },
+  preQuestions: { q1: "", q2: "", q3: "" },
+  messages: [],
+  annotations: {},
+  selectedTaylorMessageId: null,
+  studyCode: ""
+};
+
+const saved = localStorage.getItem("taylor_task_state");
+if (saved) {
+  try {
+    Object.assign(state, JSON.parse(saved));
+  } catch (e) {
+    console.error("State load error:", e);
+  }
+}
+
+function persist() {
+  localStorage.setItem("taylor_task_state", JSON.stringify(state));
+}
