@@ -687,13 +687,28 @@ downloadBtn.addEventListener("click", () => {
 
   const downloadText = (text, filename, mime = "text/plain;charset=utf-8") => {
     const blob = new Blob([text], { type: mime });
+
+    // IE / old Edge fallback
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(blob, filename);
+      return;
+    }
+
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
+
+    // Safari fix
+    if (typeof a.download === "undefined") {
+      window.location.href = url;
+      return;
+    }
+
     a.href = url;
     a.download = filename;
     document.body.appendChild(a);
     a.click();
     a.remove();
+
     setTimeout(() => {
       URL.revokeObjectURL(url);
     }, 1000);
