@@ -243,6 +243,18 @@ const finishBtn = document.getElementById("finishBtn");
 const downloadBtn = document.getElementById("downloadBtn");
 const newConvBtn = document.getElementById("newConvBtn");
 
+  // ---- DOM ----
+const classCodeInput = document.getElementById("classCode");
+
+if (classCodeInput) {
+  classCodeInput.value = state.classCode || "";
+
+  classCodeInput.addEventListener("input", () => {
+    state.classCode = classCodeInput.value.trim();
+    persist();
+  });
+}
+
 // ---- Init inputs ----
 firstNameInput.value = state.name?.firstName || "";
 lastNameInput.value = state.name?.lastName || "";
@@ -735,13 +747,4 @@ if (saved) {
 
 function persist() {
   localStorage.setItem("taylor_task_state", JSON.stringify(state));
-}
-const classCodeInput = document.getElementById("classCode");
-
-if (classCodeInput) {
-  classCodeInput.value = state.classCode || "";
-  classCodeInput.addEventListener("input", () => {
-    state.classCode = classCodeInput.value.trim();
-    persist();
-  });
 }
