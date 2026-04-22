@@ -182,6 +182,7 @@ WICHTIGE HINWEISE ZUR UMSETZUNG
 const state = {
   sessionId: crypto.randomUUID(),
   startedAt: new Date().toISOString(),
+  classCode: "", 
   name: { firstName: "", lastName: "" },
   preQuestions: { q1: "", q3: "" },
   messages: [],         // {id, role, who:'teacher'|'taylor', text, ts}
@@ -723,18 +724,6 @@ submitBtn?.addEventListener("click", () => {
 }
 
 // ---- IGNORE ——REFRESH BUTTON
-const state = {
-  sessionId: crypto.randomUUID(),
-  startedAt: new Date().toISOString(),
-  classCode: "", 
-  name: { firstName: "", lastName: "" },
-  preQuestions: { q1: "", q2: "", q3: "" },
-  messages: [],
-  annotations: {},
-  selectedTaylorMessageId: null,
-  studyCode: ""
-};
-
 const saved = localStorage.getItem("taylor_task_state");
 if (saved) {
   try {
