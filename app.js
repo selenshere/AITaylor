@@ -291,10 +291,10 @@ function showChat(){
   renderChat();
   updateCounts();
   if (state.completed) openThanks();
-}
 
-if (state.selectedTaylorMessageId) {
-  openAnalysis(state.selectedTaylorMessageId);
+  if (state.selectedTaylorMessageId) {
+    openAnalysis(state.selectedTaylorMessageId);
+  }
 }
 
 function teacherMessageCount(){ return state.messages.filter(m=>m.who==="teacher").length; }
