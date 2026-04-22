@@ -293,6 +293,10 @@ function showChat(){
   if (state.completed) openThanks();
 }
 
+if (state.selectedTaylorMessageId) {
+  openAnalysis(state.selectedTaylorMessageId);
+}
+
 function teacherMessageCount(){ return state.messages.filter(m=>m.who==="teacher").length; }
 function updateCounts(){
   const limitReached = teacherMessageCount() >= MAX_TEACHER_MESSAGES;
