@@ -188,7 +188,7 @@ const state = {
   annotations: {},      // messageId -> { tagType?, tagWhy?, reasoning, nextIntent, updatedAt }
   selectedTaylorMessageId: null,
   completed: false,
-  studyCode: ""         // optional
+  studyCode: ""        
 };
 
 // Persist across refresh. Use the "Start a new conversation" button to reset.
@@ -283,7 +283,7 @@ startBtn.addEventListener("click", async () => {
   const c = q3.value.trim();
   const classCode = document.getElementById("classCode").value.trim();
 
-  // ✅ class code kontrol
+  // class code kontrol
   if (!classCode) {
     formError.textContent = "Please enter the class code.";
     return;
@@ -300,10 +300,7 @@ startBtn.addEventListener("click", async () => {
     return;
   }
 
-  // 🔥 class_id kaydet
   localStorage.setItem("class_id", classData.id);
-
-  // ✅ normal validation (senin eski çalışan yapı)
   if (!fn || !ln) {
     formError.textContent = "Please fill in first name and last name (required).";
     return;
@@ -314,14 +311,13 @@ startBtn.addEventListener("click", async () => {
     return;
   }
 
-  // ✅ state kaydet
+  // state kaydet
   state.name = { firstName: fn, lastName: ln };
   state.preQuestions = { q1: a, q3: c };
   persist();
 
   showChat();
 
-  // 🔥 Q3 ilk mesaj (ESKİ DOĞRU MANTIK)
   if (state.messages.length === 0 && !chatPaused) {
     await sendTeacherMessage(c);
   }
@@ -598,7 +594,7 @@ function openModal(html){
   box.querySelector("#__modalCloseBtn").addEventListener("click", () => wrap.remove());
 }
 
-// ---- Submit: Drive upload + popup (double-click safe) ----
+// ---- Submit: Drive upload + popup (double-click safe) bunu kullanmıyoruz burada ----
 const submitBtn = document.getElementById("submitBtn");
 let submitting = false;
 
@@ -730,7 +726,7 @@ submitBtn?.addEventListener("click", () => {
 const state = {
   sessionId: crypto.randomUUID(),
   startedAt: new Date().toISOString(),
-  classCode: { classCode ""},
+  classCode: "", 
   name: { firstName: "", lastName: "" },
   preQuestions: { q1: "", q2: "", q3: "" },
   messages: [],
@@ -750,4 +746,13 @@ if (saved) {
 
 function persist() {
   localStorage.setItem("taylor_task_state", JSON.stringify(state));
+}
+const classCodeInput = document.getElementById("classCode");
+
+if (classCodeInput) {
+  classCodeInput.value = state.classCode || "";
+  classCodeInput.addEventListener("input", () => {
+    state.classCode = classCodeInput.value.trim();
+    persist();
+  });
 }
